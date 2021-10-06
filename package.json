@@ -1,0 +1,23 @@
+{
+  "name": "servidor-de-gestion-y-mantenimiento-de-flota-de-vehiculos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saidc/Servidor-De-Gestion-y-Mantenimiento-de-flota-de-vehiculos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saidc/Servidor-De-Gestion-y-Mantenimiento-de-flota-de-vehiculos/issues"
+  },
+  "homepage": "https://github.com/saidc/Servidor-De-Gestion-y-Mantenimiento-de-flota-de-vehiculos#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
