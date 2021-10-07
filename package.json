@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/saidc/Servidor-De-Gestion-y-Mantenimiento-de-flota-de-vehiculos#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "mysql": "^2.18.1"
   }
 }

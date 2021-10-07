@@ -1,10 +1,11 @@
 var mysql = require("mysql");
+require('dotenv').config();
 
 var conexion = mysql.createConnection({
-    host: "us-cdbr-east-04.cleardb.com",
-    database: "usuarios_db",
-    user: "b08ae094de4bbb",
-    password: "98b14354"
+    host:       process.env.DB_HOST,
+    database:   process.env.DB_DATABASE,
+    user:       process.env.DB_USER,
+    password:   process.env.DB_PASWORD
 });
 
 conexion.connect(function(error){
