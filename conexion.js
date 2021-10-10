@@ -1,27 +1,43 @@
-var mysql = require("mysql");
-require('dotenv').config();
+const db = require("./BaseDeDatos/DataBase.js");
 
-var conexion = mysql.createConnection({
-    host:       process.env.DB_HOST,
-    database:   process.env.DB_DATABASE,
-    user:       process.env.DB_USER,
-    password:   process.env.DB_PASWORD
-});
-
-conexion.connect(function(error){
-    if(error){
-        throw error;
-    }else{
-        console.log("conexion exitosa");
-    }
-});
-conexion.query("SELECT * FROM heroku_d887aadfd8b0128.usuario; ",(error, results, fields) =>{
+const user = db.user;
+/* // Crear un Usuario
+user.CrearUsuario("jazedsfr","12345asdf","trabajasdfdor","114087asdf321666",(error, results, fields)=>{
     if(error){
         throw error;
     }
     console.log(results);
 });
-
+*/
+/* // Actualizar Usuario
+user.ActualizarUsuario(55,"juan","12345","conductor","74185296",(error,results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
+*/
+/* // Leer Usuario
+user.LeerUsuario(55,(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
+*/
+/* // Elimina un usuario
+user.EliminarUsuario(55,(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+    if(results.affectedRows > 0){
+        console.log("se elimino el usuario");
+    }else{
+        console.log("el usuario no existe");
+    }
+});
+*/
 // finaliza la conexion
-conexion.end();
-// 2C3710DEB86A594120A43185687A70081AE9AB293C6100C8F8C94AA155C3B5DF
+db.end();
+// El tiempo online , 
