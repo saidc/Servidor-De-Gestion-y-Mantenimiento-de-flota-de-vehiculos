@@ -43,3 +43,12 @@
             conexion.query("DELETE FROM `heroku_d887aadfd8b0128`.`usuario` WHERE (`id` = ?);",[ID],callback);
         }
     }
+    
+    //  Get ID de USUARIO
+    module.exports.GetID_USUARIO = (usuario,password,callback)=>{
+        if(conexion == null){
+            throw new Error("La variable de Conexion no ha sido definida");
+        }else{
+            conexion.query("SELECT id FROM heroku_d887aadfd8b0128.usuario WHERE (USUARIO = ? and PASSWORD = ?);",[usuario,password],callback);
+        }
+    }
