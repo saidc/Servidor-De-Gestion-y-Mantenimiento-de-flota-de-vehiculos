@@ -1,48 +1,31 @@
-// Socket
-const socketIO = require('socket.io');
+//var createError = require("http-errors");
+var express = require('express');
+var path = require("path");
+var bcrypt = require('bcryptjs'); // para generar hash de las contraseñas que se guardaran en la Base de datos 
+// var cookieParser = require("cookie-parser"); // manejo de solo cookies pero no maneja session y cifrado
+var session = require("express-session");
+var logger = require("morgan");
+var bodyParser = require('body-parser')
 
-const PORT = process.env.PORT || 3000;
+var indexRouter = require("./routes/index.js");
+const { error404 , generarErrorHandler, error } = require("./middleware");
+const app = express();
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
-const INDEX = '/index.html';
+// view engine setup
+//app.set("views" , path.join( __dirname,"views")); // buscar funcionalidad
+//app.set("view engine", "pug");
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+app.use(express.json()); // ayuda a la lectura de req formato json en body
+// app.use(express.urlencoded({extended: false})); // Buscar funcionalidad
 
-const io = socketIO(server);
+app.use(express.static(path.join(__dirname, "public")));
 
-function procesarBot(rta, socket ){
-    var id = socket.id;
-    var level = clientes[cliPos].level;
-    if (level == "init"){
-        if(rta == "1"){
-            socket.send( "Bot: "+getlevel(Inconformidad,id));
-        }else if(rta == "2"){
-            socket.send( "Bot: "+getlevel(PronblemaDeDinero,id));
-        }else{
-            socket.send( "Bot: "+getlevel(init,id));
-        }
-    }else if(level == "inconformidad"){
-        if(rta == "1"){
-            socket.send( "Bot: "+getlevel(EnviarQueja,id));
-        }else{
-            socket.send( "Bot: "+getlevel(Volver,id));
-        }
-    }
-}
+app.use("/",indexRouter);
 
-io.on('connection', (socket) => {
-    console.log('Client connected');
-    // mensaje que se envia a todos los clientes conectados con el socket
-    socket.emit("message", "se conecto un nuevo cliente: "+ socket.id +"\n");
+app.use(error); 
 
-    socket.on('disconnect', () => {
-        // id de cliente desconectado socket.id
-    });
-    
-    socket.on('message', (msg) => {
-        //socket.emit("message", "me+"+socket.id+": "+ msg+"\n");
-
-        // function procesar(msg, socket);
-    });
-});
+module.exports = app ;

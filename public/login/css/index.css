@@ -1,0 +1,160 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    background-color: #F6F7FB;
+}
+#content{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+    #boxContent {
+        display: flex;
+        flex-direction:row;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        box-shadow: 0 15px 24px 0 rgb(137 138 154 / 15%);
+    }
+        #infoView{
+            display: none;
+        }
+            #infoView p{
+                font-family: 'Roboto',sans-serif;
+                font-size: 14px;
+                line-height: 24px;
+                font-weight: 300;
+                font-weight: 200;
+                margin-top: 8px;
+                color: #F6F7FB;
+            }
+            #infoView h1{
+                color:#F6F7FB;
+            }
+            #info_image{
+                max-width: 280px;
+            }
+        #formView{
+            width: 300px;
+            padding: 10px;
+        }
+            #logo{
+                max-width: 150px;
+            }
+            #messageBox{
+                line-height: 16px;
+                box-shadow: 0 2px 0 0 #70c9b0;
+                background: #DBF0F1;
+                color: #454655;
+                background-color: #FFA5B5;
+                box-shadow: 0 2px 0 0 #ff4567;
+            }
+            #messageBox section{
+                box-sizing: border-box;
+                min-width: 0;
+                font-family: 'Roboto',sans-serif;
+                line-height: 16px;
+                font-size: 14px;
+                font-weight: normal;
+                padding-left: 24px;
+                padding-right: 24px;
+                padding-top: 16px;
+                padding-bottom: 16px;
+            }
+            
+            .input-group{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+                .input-group label{
+                    margin-bottom: 5px;
+                }
+                .input-group input{
+                    box-sizing: border-box;
+                    width: 100%;
+                    background: transparent;
+                    border: 1px solid #C0C0CA;
+                    font-size: 14px;
+                    line-height: 24px;
+                    font-family: 'Roboto',sans-serif;
+                    outline: none;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    padding-top: 4px;
+                    padding-bottom: 4px
+                }
+            .action-group{
+                font-family: 'Roboto',sans-serif;
+                font-size: 14px;
+                line-height: 24px;
+                font-weight: 300;
+                text-align: center;
+                margin-top: 24px;
+            }
+            .action-group button{
+                font-size: 14px;
+                -webkit-appearance: none;
+                outline: 0;
+                display: inline-block;
+                font-family: 'Roboto',sans-serif;
+                line-height: 24px;
+                vertical-align: middle;
+                border: 1px solid #FF3A3D;
+                text-decoration: none;
+                padding: 4px 32px;
+                box-sizing: border-box;
+                background-color: #FF3A3D;
+                color: #fff;
+                border-color: transparent;
+            }
+            .action-group button:hover{
+                border: 1px solid #a12528;
+                background-color: #a12528;
+            }
+
+        @media screen and (min-width: 769px){
+            #formView {
+                width: auto;
+                padding: 10px;
+            }
+            #infoView {
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                min-width: 0;
+                font-family: 'Roboto',sans-serif;
+                line-height: 16px;
+                padding: 48px;
+                background-color: #FF3A3D;
+                color: #fff;
+                width: 380px;
+                -webkit-box-flex: 0;
+                flex-grow: 0;
+                position: relative;   
+            }
+        }
+        @media screen and (min-width: 577px){
+            #formView {
+                width: 480px;
+                padding: 10px;
+            }
+        }
+    #externalContent {
+        color: #898A9A;
+        font-size: 12px;
+        margin-top: 32px;
+    }
+    #externalContent a{
+        color: #898A9A;
+        text-decoration: none;
+    }        
+    #externalContent a:hover{
+        color: #FF3A3D;
+    }        

@@ -1,4 +1,4 @@
-const db = require("./BaseDeDatos/DataBase.js");
+const db = require("../services/sql/DataBase.js");
 
 const user = db.user;
 /* // Crear un Usuario

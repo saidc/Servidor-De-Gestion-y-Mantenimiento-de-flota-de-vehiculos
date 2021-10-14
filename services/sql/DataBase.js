@@ -1,16 +1,12 @@
 console.log("Cargando Base de datos ...");
 
 var mysql = require("mysql");
-require('dotenv').config();
+
+var sql_config = require("../../config/sql.js");
 
 const user = require("./CRUD/usuario.js");
 
-var conexion = mysql.createConnection({
-    host:       process.env.DB_HOST,
-    database:   process.env.DB_DATABASE,
-    user:       process.env.DB_USER,
-    password:   process.env.DB_PASWORD
-});
+var conexion = mysql.createConnection(sql_config);
 
 user.addConexion(conexion);
 
