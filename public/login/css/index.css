@@ -47,6 +47,7 @@ body{
                 max-width: 150px;
             }
             #messageBox{
+                display: none;
                 line-height: 16px;
                 box-shadow: 0 2px 0 0 #70c9b0;
                 background: #DBF0F1;
