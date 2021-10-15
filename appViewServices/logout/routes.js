@@ -9,6 +9,6 @@ var isAuth = (req, res,next)=>{
         res.redirect("/login");
     }
 }
-router.get( '/',isAuth, controller.getHome );
+router.post( '/',isAuth, controller.postLogout );
 
 module.exports = router;

@@ -1,7 +1,6 @@
 
-module.exports.error = async ( req,res,next)=>{
-    var auth = false;
-    if( auth){
+module.exports.error = async (req,res,next)=>{
+    if(req.session.isAuth){
         res.redirect('/home');
     }else{
         res.redirect('/login');
