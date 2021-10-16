@@ -40,25 +40,18 @@ user.LeerUsuario(65,(error, results, fields)=>{
 });
 */
 
-user.GetID_USUARIO("saidjoc@gmail.com",(error, results, fields)=>{
+user.GetUser_by_USUARIO("saidjoc@gmail.com",async (error, results, fields)=>{
     if(error){
         throw error;
     }
     if(results.length > 0){
-        user.LeerUsuario(results[0].id,async (error2, results2, fields2)=>{
-            if(error2){
-                throw error2;
-            }
-            if(results2.length > 0){
-                const {USUARIO, PASSWORD} = results2[0];
-                const password = "abcd1234";
-                const isMatch = await bcrypt.compareSync(password,PASSWORD);
-                console.log(results2);
-                //  saidjoc@gmail.com 
-                //  $2a$12$sLLTCULEtIyaQQkEa77myOMrnuCtjyfcrxKEOdjPXfBhZIcC5wMO6
-                
-            }
-        });
+        const {USUARIO, PASSWORD} = results[0];
+        const password = "abcd1234";
+        const isMatch = await bcrypt.compareSync(password,PASSWORD);
+        console.log(results,isMatch);
+        //  saidjoc@gmail.com 
+        //  $2a$12$sLLTCULEtIyaQQkEa77myOMrnuCtjyfcrxKEOdjPXfBhZIcC5wMO6  
+        //  abcd1234
     }
 });
 
