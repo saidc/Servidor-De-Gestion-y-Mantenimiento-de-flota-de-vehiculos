@@ -1,40 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/index.css"> 
-    <title>HOME</title>
-</head>
-<body>
-    
-    <div id="app">
-        <div id="sidebar">
-            <div id="toplogo">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/index.css"> 
+        <title>HOME</title>
+    </head>
+    <body>
+        <div id="app">
+            <div id="sidebar">
+                <div id="toplogo">
+                    <img id="logo" src="assets/rooster.svg" alt="imagen logo de login" >
+                </div>
+                <div id="resources">
+                    <ul id="resourceslist">
+                        <li>
+                            <a href="#Usuarios">Usuarios</a>
+                        </li>
+                        <li><a href="#Vehiculos">Vehiculos</a></li>
+                        <li><a href="#Reportes">Reportes</a></li>
+                        <li><a href="#Alertas">Alertas</a></li>
+                    </ul>
+                </div>
+                <div id="pages">
+                </div>
+                <div id="sidebarbottom">
+                </div>
             </div>
-            <div id="resources">
-            </div>
-            <div id="pages">
-            </div>
-            <div id="sidebarbottom">
+            <div id="viewbox">
+                <div id="navbar">
+                    <div id="burger">
+                        <a class="burger">
+                            <div class="bar bun-top"></div>
+                            <div class="bar lettuce"></div>
+                            <div class="bar mustard"></div>
+                            <div class="bar ketchup"></div>
+                            <div class="bar patty"></div>
+                            <div class="bar bun-bot"></div>
+                        </a>
+                    </div>
+                    <div id="versioninfo">
+                    </div>
+                    <div id="userbox">
+                        <section id="userboxinfo">
+                            <div id="userboxemail">
+                                saidjoc@gmail.com
+                            </div>
+                            <div id="userboxrol">
+                                Administrador
+                            </div>
+                        </section>
+                        <div id="userboxoptions">
+                            <button id="userboxlogoutbtn">. . . </button>
+                        </div>
+                    </div>
+                    <div id="navbaropt">
+                        <form action="/logout" method="post">
+                            <button>Cerrar Sesion</button>
+                        </form>
+                    </div>
+                </div>
+                <div id="contentbox">  
+                </div>
             </div>
         </div>
-        <div id="viewbox">
-            <div id="navbar">
-                <div id="burger">
-                </div>
-                <div id="versioninfo">
-                </div>
-                <div id="userbox">
-                    <form action="/logout" method="post">
-                        <button>Cerrar Sesion</button>
-                    </form>
-                </div>
-            </div>
-            <div id="contentbox">  
-            </div>
-        </div>
-    </div>
-</body>
+        <script src="javascript/styleEvents.js"></script>
+        <script src="javascript/index.js"></script>
+    </body>
 </html>

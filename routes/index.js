@@ -4,6 +4,7 @@ const login     = require("../appViewServices/login/routes.js")     ;
 const home      = require("../appViewServices/home/routes.js")      ;
 const register  = require("../appViewServices/register/routes.js")  ;
 const logout    = require("../appViewServices/logout/routes.js")    ;
+const api       = require("../apiServices/index.js")    ;
 var express = require("express");
 var router = express.Router();
 
@@ -30,5 +31,6 @@ router.use ("/login",     isAuth2 ,login);
 router.use ("/home",      isAuth ,home);
 router.use ("/register",  isAuth ,register);
 router.use("/logout",     isAuth ,logout);
+router.use("/api" ,api);
 
 module.exports = router;
