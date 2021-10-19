@@ -52,6 +52,8 @@ user.GetUser_by_USUARIO("saidjoc@gmail.com",async (error, results, fields)=>{
         //  saidjoc@gmail.com 
         //  $2a$12$sLLTCULEtIyaQQkEa77myOMrnuCtjyfcrxKEOdjPXfBhZIcC5wMO6  
         //  abcd1234
+    }else{
+        console.log("no existe ese Usuario");
     }
 });
 

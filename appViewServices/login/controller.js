@@ -11,17 +11,19 @@ module.exports  = {
     postLogin(req, res){
         const {email, password} = req.body;
         if(!valid.isValidEmail(email) || !valid.isValidPassword(password)){return res.redirect('/login');}
-        user.GetUser_by_USUARIO("saidjoc@gmail.com",async (error, results, fields)=>{
+        user.GetUser_by_USUARIO(email,async (error, results, fields)=>{
             if(error){return res.redirect('/login');}
             if(results.length > 0){
                 const {USUARIO, PASSWORD} = results[0];
                 const isMatch = await bcrypt.compareSync(password,PASSWORD);
-                req.session.isAuth = true;
                 if(isMatch){
+                    req.session.isAuth = true;
                     return res.redirect('/home');
                 }else{
                     return res.redirect('/login');
                 }
+            }else{
+                return res.redirect('/login');
             }
         });
     }

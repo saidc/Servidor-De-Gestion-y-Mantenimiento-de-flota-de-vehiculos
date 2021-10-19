@@ -1,15 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const user       = require("./users/routes.js")    ;
-var isAuth = (req, res,next)=>{
-    console.log('Request URL:', req.originalUrl);
-    if(req.session.isAuth){
-        next();
-    }else{
-        res.json({haserror: true});
-    }
-}
+const homeroutes    = require("./homeroutes/routes.js")    ;
+const{error,isAuth} = require("../middleware/apiServices.js");
 
+router.use(homeroutes);
+// /api/user
 router.use("/user" ,isAuth,user);
+router.use(error);
 
 module.exports = router;

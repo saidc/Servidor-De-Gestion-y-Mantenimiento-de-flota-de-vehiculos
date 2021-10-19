@@ -7,6 +7,16 @@ document.getElementById("userboxlogoutbtn").addEventListener("click", function()
         logoutbtn.style.display = "none";     
     }
 });
+
+function updateLoader(id) {
+    var t = document.getElementById(id);
+    if(t.className == "loader on"){
+    	t.className = "loader off";
+    }else{
+    	t.className = 'loader on';
+    }
+}
+/*
 document.querySelector( '.burger' ).addEventListener( 'click', function ( e ) {
     e.preventDefault;
     var sw = this.className === 'burger';
@@ -23,7 +33,7 @@ document.querySelector( '.burger' ).addEventListener( 'click', function ( e ) {
         viewbox.style.marginLeft = "0px";
     }
 });
-
+*/
 /*
     var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutationRecord) {

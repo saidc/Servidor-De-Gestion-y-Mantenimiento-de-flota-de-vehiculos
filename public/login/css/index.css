@@ -159,3 +159,30 @@ body{
     #externalContent a:hover{
         color: #FF3A3D;
     }        
+
+.loader {
+    margin: 25px;
+    border: 8px solid #F6F7FB;
+    border-radius: 50%;
+    border-top: 8px solid #FF3A3D;
+    width: 20px;
+    height: 20px;
+    -webkit-animation: spin 0.6s linear infinite;
+    animation: spin 0.6s linear infinite;
+}
+.on {
+    display: block;
+}
+.off {
+    display: none;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

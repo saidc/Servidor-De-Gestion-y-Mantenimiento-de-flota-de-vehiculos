@@ -5,6 +5,7 @@ var messageBox = document.getElementById("messageBox");
 var text = document.getElementById("messageBox-text");
 
 function validated(){
+    updateLoader();
     var i = 0;
     if(!isValidEmail(email.value)){
         email.style.border = "1px solid red";
@@ -19,14 +20,18 @@ function validated(){
         password.focus();
         i += 2;
     }
+    
     switch (i) {
         case 1:
+            updateLoader();
             text.textContent = "Introduzca un correo valido micorreo@email.com";
             return false;
         case 2:
+            updateLoader();
             text.textContent = errors.join("\n");//"Introduzca una contraseña valida mayor a 5 digitos";
             return false;
         case 3:
+            updateLoader();
             text.textContent = "Introduzca un correo valido micorreo@email.com \n"+ errors.join("\n");
             return false;
         default:
@@ -52,4 +57,13 @@ function validatePassword(password) {
     }
     return errors;
     
+}
+
+function updateLoader() {
+    var t = document.getElementById("loader");
+    if(t.className == "loader on"){
+    	t.className = "loader off";
+    }else{
+    	t.className = 'loader on';
+    }
 }
