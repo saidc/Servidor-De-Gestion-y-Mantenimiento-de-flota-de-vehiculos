@@ -1,18 +1,13 @@
 var host = "http://127.0.0.1:3000";
 
-var createli = (content,id, haserror)=>{
-    var li = document.createElement('li');
-    var div = document.createElement('div');
-        div.classList.add("sidebarnavelement");
-        if(!haserror){
-            div.setAttribute("onclick", "sidebarnavelement('"+id+"')");
-        }
-    var i = document.createElement('i');
-        i.innerHTML=content;
-        i.classList.add("zmdi");
-    div.appendChild(i);
-    li.appendChild(div);
-    return li;
+//post request 
+var postJsonData = async (jsonObject,id)=>{
+    const response = await fetch(host+"/api/"+id, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(jsonObject)
+    });
+    return await response.json();
 }
 
 var initView = ()=>{
@@ -39,29 +34,21 @@ var initView = ()=>{
     });
 };
 // inicializa la lista de la barra de direcciones
-
 initView(); 
 
-var sidebarnavelement = (id)=>{
+
+/** cuando se presiona un elemento de 
+ * la barra de direcciones donde 
+ * el usuario puede navegar , permitiendo
+ * hacer carga de la visualizacion de dicha 
+ * seleccion 
+ * */
+var sidebarnavelement = async (id)=>{
     updateLoader("contentboxloader");
     var payload = {
-        a: 1,
-        b: 2
+        PosicionFila:0 ,NoFilas:10
     };
-    var data = new FormData();
-    data.append( "json", JSON.stringify( payload ) );
-    console.log("request to:",host+"/api/"+id);
-    fetch(host+"/api/"+id,
-    {
-        method: "POST",
-        body: data
-    })
-    .then(res=>{ return res.json(); })
-    .then(data=>{ 
-        updateLoader("contentboxloader");
-        console.log(data);
-    }).catch(error => {
-        console.log(error);
-        updateLoader("contentboxloader");
-    });
+    var res = await postJsonData(payload,id);
+    updateLoader("contentboxloader");
+    console.log(res);
 }

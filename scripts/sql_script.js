@@ -15,10 +15,25 @@ var CrearUsuario = async(email, password, rol, cedula)=>{
 
 //CrearUsuario("jolecorcar@gmail.com","abcd1234","trabajador","77016463");
 //CrearUsuario("saidjoc@gmail.com","abcd1234","administrador","1140873219");
-
+/*
 user.LeerUsuario(65,(error, results, fields)=>{
     if(error){
         throw error;
     }
     console.log(results); 
 });
+*/
+user.getUsuariosPosNoRows(0,15,(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results); 
+});
+/*
+user.getNumberOfUsuarios((error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results[0].NumRow); 
+});
+*/

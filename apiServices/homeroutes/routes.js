@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const{error,isAuth} = require("../../middleware/apiServices.js");
+const {user} = require("../../services/sql/index.js");
+
 
 router.get( "/homesidebar", isAuth, async(req, res)=>{
     var msg = [
@@ -11,12 +13,35 @@ router.get( "/homesidebar", isAuth, async(req, res)=>{
     return res.status(200).json({error:false, res:msg});
 });
 router.post( "/Usuarios", isAuth, async(req, res)=>{
+    const {PosicionFila ,NoFilas,json} = req.body;
+    console.log(PosicionFila ,NoFilas);
+    user.getNumberOfUsuarios((error, results, fields)=>{
+        if(error){
+            return res.status(200).json({error:true, res:error});
+        }else{
+            var NumRows = results[0].NumRow;
+            user.getUsuariosPosNoRows(PosicionFila ,NoFilas,(error, results, fields)=>{
+                if(error){
+                    return res.status(200).json({error:true, res:error});
+                }else{
+                    console.log(results); 
+                    var msg = {
+                        numusers:NumRows, 
+                        users:results
+                    };
+                    return res.status(200).json({error:false, res:msg});
+                }
+            });
+        } 
+    });
+    /*
     var msg = [
-        {content: "Usuario" , id:"1"},
-        {content: "Usuario" , id:"2"},
-        {content: "Usuario" , id:"3"}
+        {content: "Usuario1" , id:"1"},
+        {content: "Usuario2" , id:"2"},
+        {content: "Usuario3" , id:"3"}
     ];
     return res.status(200).json({error:false, res:msg});
+    */
 });
 router.post( "/Vehiculos", isAuth, async(req, res)=>{
     var msg = [

@@ -5,7 +5,8 @@
     
     module.exports.addQuery = (que)=>{
         query = que;
-    } 
+    }
+
     // CREATE    USUARIO
     module.exports.CrearUsuario = async(USUARIO, PASSWORD, ROL, CEDULA, callback)=>{
         await query("INSERT INTO `heroku_d887aadfd8b0128`.`usuario` (`USUARIO`, `PASSWORD`, `ROL`, `CEDULA`) VALUES ( ? , ? , ? , ? );",[USUARIO, PASSWORD, ROL, CEDULA], callback);
@@ -13,7 +14,14 @@
     
     // READ      USUARIO
     module.exports.LeerUsuario = async (ID , callback)=>{
-        await query("SELECT * FROM heroku_d887aadfd8b0128.usuario WHERE (`id`= ? );",[ID],callback);
+        await query("SELECT id,USUARIO,ROL,CEDULA FROM heroku_d887aadfd8b0128.usuario WHERE (`id`= ? );",[ID],callback);
+    }
+    
+    module.exports.getNumberOfUsuarios = async ( callback)=>{
+        await query("SELECT COUNT(*) as NumRow  FROM heroku_d887aadfd8b0128.usuario;",[],callback);
+    }
+    module.exports.getUsuariosPosNoRows = async ( PosicionFila ,NoFilas,callback)=>{
+        await query("SELECT id,USUARIO,ROL,CEDULA FROM heroku_d887aadfd8b0128.usuario LIMIT ?,?;",[PosicionFila,NoFilas],callback);
     }
     // UPDATE    USUARIO
     module.exports.ActualizarUsuario = async (ID,USUARIO, PASSWORD, ROL, CEDULA, callback)=>{
@@ -41,3 +49,4 @@
     module.exports.GetUser_by_USUARIO = async (usuario,callback)=>{
         await query("SELECT * FROM heroku_d887aadfd8b0128.usuario WHERE ( USUARIO = ? );",[usuario],callback);
     }
+
