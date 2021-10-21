@@ -1,5 +1,9 @@
 var host = "http://127.0.0.1:3000";
 
+
+//inicializa evento del check burger
+burgercheckbox();
+
 //post request 
 var postJsonData = async (jsonObject,id)=>{
     const response = await fetch(host+"/api/"+id, {
@@ -35,8 +39,6 @@ var initView = ()=>{
 };
 // inicializa la lista de la barra de direcciones
 initView(); 
-
-
 /** cuando se presiona un elemento de 
  * la barra de direcciones donde 
  * el usuario puede navegar , permitiendo
@@ -57,5 +59,4 @@ var sidebarnavelement = async (id)=>{
         document.getElementById("contentbox").appendChild(createTable([]));
         updateLoader("contentboxloader");
     }
-    
 }

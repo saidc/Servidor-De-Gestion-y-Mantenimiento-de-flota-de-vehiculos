@@ -17,7 +17,7 @@ var createli = (content,id, haserror)=>{
 var createTable = (list)=>{
     var table = document.createElement('table');
     table.setAttribute("data-table", "col-two");
-    console.log(list);
+    console.log("user list:",list);
     if(list.length > 0){
         var data = Object.keys(list[0]);
         console.log(data);

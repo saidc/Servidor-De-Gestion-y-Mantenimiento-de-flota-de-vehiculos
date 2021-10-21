@@ -8,7 +8,7 @@ document.getElementById("userboxlogoutbtn").addEventListener("click", function()
     }
 });
 
-function updateLoader(id) {
+var updateLoader = (id)=>{
     var t = document.getElementById(id);
     if(t.className == "loader on"){
     	t.className = "loader off";
@@ -16,6 +16,23 @@ function updateLoader(id) {
     	t.className = 'loader on';
     }
 }
+
+var burgercheckbox = ()=>{
+    var checkbox = document.getElementById("burgercheckbox");
+    var sidebar = document.getElementById("sidebar");
+    checkbox.addEventListener( 'change', function() {
+        if(this.checked) {
+            // Checkbox is checked..
+            sidebar.className = "sidebaron";
+            //console.log("burger chequeado ");
+        } else {
+            sidebar.className = "sidebaroff";
+            //console.log("burger no chequeado ");
+            // Checkbox is not checked..
+        }
+    });
+}
+
 /*
 document.querySelector( '.burger' ).addEventListener( 'click', function ( e ) {
     e.preventDefault;
