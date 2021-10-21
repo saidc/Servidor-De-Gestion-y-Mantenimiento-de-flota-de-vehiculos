@@ -49,6 +49,13 @@ var sidebarnavelement = async (id)=>{
         PosicionFila:0 ,NoFilas:10
     };
     var res = await postJsonData(payload,id);
-    updateLoader("contentboxloader");
-    console.log(res);
+    if(!res.error){
+        var numusers = res.res.numusers;
+        document.getElementById("contentbox").appendChild(createTable(res.res.users));
+        updateLoader("contentboxloader");
+    }else{
+        document.getElementById("contentbox").appendChild(createTable([]));
+        updateLoader("contentboxloader");
+    }
+    
 }
