@@ -90,10 +90,11 @@ html,body,#app{
   width:    -moz-calc(100% - 50px);
   width:         calc(100% - 50px);
   height: 100%;
+  background: #f6f7fb;
 }
     #navbar{
         height: 64px;
-        background: var(--alternative-color);
+        background: #ffffff;
         box-shadow: 0 15px 24px 0 rgb(137 138 154 / 15%);
         position:relative;
     }
@@ -173,14 +174,7 @@ html,body,#app{
                 border: 1px solid #a12528;
                 background-color: #a12528;
             }
-    /*        
-      @media screen and (min-width: 1324px){
-          #sidebar{
-              left:250px;
-          }
-      }
-    */
-
+    
 .btn-12 {
     text-align: center;
     display: inline-block;
@@ -206,7 +200,7 @@ html,body,#app{
   
   .btn-12:hover:before {
     width: 100%;
-    left:0;
+    left:10px;
   }
   
 #contentbox {
@@ -216,6 +210,7 @@ html,body,#app{
     align-items: center;
     align-content: center;
     flex-wrap: nowrap;
+    padding: 25px;
 }
 .loader {
     margin: 25px;
@@ -244,6 +239,34 @@ html,body,#app{
     100% { transform: rotate(360deg); }
 }
 
+  #contenboxheaderactions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #contentboxactionheader{
+    width: 100%;
+  }
+  #headerinfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  #headerinfo span{
+    padding: 4px 8px;
+  }
+
+  #addcontentbox{
+    width: 100%;
+    
+  }
+  #addcontentbox table{
+    background: #ffffff;
+    padding: 32px 8px;
+
+  }
 
 #menuToggle{
   display: block;
