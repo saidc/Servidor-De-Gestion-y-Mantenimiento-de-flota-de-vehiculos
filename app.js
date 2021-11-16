@@ -14,6 +14,7 @@ const app = express();
 
 
 // add session middleware
+console.log(sql_config);
 var sessionStore = new MySQLStore(sql_config); // se carga la config de conexion con sql para manejo de sessiones
 app.use(session({
     key: 'saidcApp',
