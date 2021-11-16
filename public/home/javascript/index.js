@@ -44,7 +44,8 @@ initView();
  * hacer carga de la visualizacion de dicha 
  * seleccion 
  * */
-var sidebarnavelement = async (id)=>{
+
+var sidebarnavelement = async (id)=>{ 
     removeaddcontentbox();
     updateLoader("contentboxloader");
     var payload = {
@@ -58,32 +59,25 @@ var sidebarnavelement = async (id)=>{
             var numusers = res.res.num;
             var button1 = "create new";
             var button2 = "filter";
-            
             var contentboxactionheader = createDiv("contentboxactionheader");
                 var contentboxtreepath = createDiv("contentboxtreepath");
-                
                 var contenboxheaderactions = createDiv("contenboxheaderactions");
                     var headerinfo = createDiv("headerinfo");
                         var contentheaderinfoh2 = createh2("contentheaderinfoh2",h2);
                         var numerofcontent = createspan("numerofcontent",numusers);
                     headerinfo.appendChild(contentheaderinfoh2);
                     headerinfo.appendChild(numerofcontent);
-                    
                     var headeractions = createDiv("headeractions");
                         var createnew = createbutton("createnew",button1);
                         var filter = createbutton("filter",button2);
                     headeractions.appendChild(createnew);
                     headeractions.appendChild(filter);
-
                 contenboxheaderactions.appendChild(headerinfo);
                 contenboxheaderactions.appendChild(headeractions);
-
             contentboxactionheader.appendChild(contentboxtreepath);
             contentboxactionheader.appendChild(contenboxheaderactions);
             addcontentbox.appendChild(contentboxactionheader);
-
             addcontentbox.appendChild(createTable(res.res.res));
-
             updateLoader("contentboxloader");
         }else{
             addcontentbox.appendChild(createTable([]));
@@ -94,7 +88,6 @@ var sidebarnavelement = async (id)=>{
         addcontentbox.appendChild(createTable([]));
         updateLoader("contentboxloader");
     }
-    
 }
 
 var removeaddcontentbox = ()=>{

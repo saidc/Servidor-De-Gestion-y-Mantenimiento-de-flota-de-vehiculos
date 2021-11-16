@@ -5,11 +5,13 @@ const mysql = require('mysql');
 const session = require('express-session'); // manejo de sessiones 
 const MySQLStore = require('express-mysql-session')(session); // almacenamiento de id de session y otra info de auth
 const sql_config = require("./config/sql.js"); // se carga la configuracion de conexion con la base de datos en sql
-var logger = require("morgan");
+var   logger = require("morgan");
 const bodyParser = require('body-parser'); // permite cargar los request del body en formato json 
 const indexRouter = require("./routes/index.js"); // manejo de direcciones de la pagina
 const { error } = require("./middleware");
 const app = express();
+
+
 
 // add session middleware
 var sessionStore = new MySQLStore(sql_config); // se carga la config de conexion con sql para manejo de sessiones

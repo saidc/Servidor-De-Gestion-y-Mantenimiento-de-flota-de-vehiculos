@@ -13,7 +13,7 @@ var createli = (content,id, haserror)=>{
     li.appendChild(div);
     return li;
 }
-    
+
 var createTable = (list)=>{
     var table = document.createElement('table');
     table.setAttribute("data-table", "col-two");

@@ -1,75 +1,67 @@
 // CRUD VEHICULO
-var conexion = null;
-module.exports.addConexion = (con)=>{
-    conexion = con;
-} 
+var query = (query_str,input,callback)=>{
+    throw new Error("La variable de query no ha sido definida");
+};
+module.exports.addQuery = (que)=>{
+    query = que;
+}
 // CREATE VEHICULO
-module.exports.CrearVehiculo = (ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
-    if(conexion == null){ 
-        throw new Error("La variable de Conexion no ha sido definida");
-    }else{
-        conexion.query("INSERT INTO `heroku_d887aadfd8b0128`.`vehiculo` (`ALIAS`, `PLACA`, `MARCA`, `LINEA`, `MODELO`, `CILINDRADA CC`, `COLOR`, `SERVICIO`, `CLASE DE VEHICULO`, `TIPO DE CARROCERIA`, `COMBUSTIBLE`, `CAPACIDAD-KG-PSJ`, `NUMERO DE MOTOR`, `VIN`, `NUMERO DE SERIE`, `NUMERO DE CHASIS`, `PROPIETARIO`, `NIT`, `POTENCIA`, `DECLARACION DE IMPORTACION`, `FECHA DE IMPORTACION`, `PUERTAS`, `FECHA MATRICULA`, `FECHA EXP LIC TTO`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?);",[ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO], callback);
-    }
+module.exports.CrearVehiculo = async(ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
+    await query("INSERT INTO `heroku_d887aadfd8b0128`.`vehiculo` (`ALIAS`, `PLACA`, `MARCA`, `LINEA`, `MODELO`, `CILINDRADA CC`, `COLOR`, `SERVICIO`, `CLASE DE VEHICULO`, `TIPO DE CARROCERIA`, `COMBUSTIBLE`, `CAPACIDAD-KG-PSJ`, `NUMERO DE MOTOR`, `VIN`, `NUMERO DE SERIE`, `NUMERO DE CHASIS`, `PROPIETARIO`, `NIT`, `POTENCIA`, `DECLARACION DE IMPORTACION`, `FECHA DE IMPORTACION`, `PUERTAS`, `FECHA MATRICULA`, `FECHA EXP LIC TTO`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?);",[ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO], callback);
 }
 // READ VEHICULO
-module.exports.LeerVehiculo = (ID , callback)=>{
-    if(conexion == null){ 
-        throw new Error("La variable de Conexion no ha sido definida");
-    }else{
-        conexion.query("SELECT * FROM heroku_d887aadfd8b0128.vehiculo WHERE (`id`= ? );",[ID],callback);
-    }
+module.exports.getVehiculobyId = async(ID , callback)=>{
+    await query("SELECT * FROM heroku_d887aadfd8b0128.vehiculo WHERE (`id`= ? );",[ID],callback);
 }
-
+module.exports.getVehiculobyPlaca = async(Placa , callback)=>{
+    await query("SELECT * FROM heroku_d887aadfd8b0128.vehiculo WHERE (PLACA = UPPER(?));",[Placa],callback);
+}
+module.exports.getVehiculosPosNoRows = async ( PosicionFila ,NoFilas,callback)=>{
+    await query("SELECT PLACA,MARCA,MODELO,LINEA,COLOR,COMBUSTIBLE FROM heroku_d887aadfd8b0128.vehiculo LIMIT ?,?;",[PosicionFila,NoFilas],callback);
+}
+// obtienen el numero de vehiculos existentes
+module.exports.getNumberOfVehiculos = async ( callback)=>{
+    await query("SELECT COUNT(*) as NumRow FROM heroku_d887aadfd8b0128.vehiculo ;",[],callback);
+}
 // UPDATE VEHICULO
-module.exports.ActualizarVehiculo = (ID,ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
-    if(conexion == null){
-        throw new Error("La variable de Conexion no ha sido definida");
-    }else{
-        var variables = [];
-        var query = "UPDATE `heroku_d887aadfd8b0128`.`vehiculo` SET ";
-        if( ALIAS != null){ variables.push(ALIAS);  query += "`ALIAS`=?,";}
-        if( PLACA != null){ variables.push(PLACA);  query += "`PLACA`=?,";}
-        if( MARCA != null){ variables.push(MARCA);  query += "`MARCA`=?,";}
-        if( LINEA != null){ variables.push(LINEA);  query += "`LINEA`=?," ;}
-        if( MODELO != null){ variables.push(MODELO);  query += "`MODELO`=?,";}
-        if( CILINDRADA_CC != null){ variables.push(CILINDRADA_CC);  query += "`CILINDRADA_CC`=?,";}
-        if( COLOR != null){ variables.push(COLOR);  query += "`COLOR`=?,";}
-        if( SERVICIO != null){ variables.push(SERVICIO);  query += "`SERVICIO`=?," ;}
-        if( CLASE_DE_VEHICULO != null){ variables.push(CLASE_DE_VEHICULO);  query += "`CLASE_DE_VEHICULO`=?,";}
-        if( TIPO_DE_CARROCERIA != null){ variables.push(TIPO_DE_CARROCERIA);  query += "`TIPO_DE_CARROCERIA`=?,";}
-        if( COMBUSTIBLE != null){ variables.push(COMBUSTIBLE);  query += "`COMBUSTIBLE`=?,";}
-        if( CAPACIDAD_KG_PSJ != null){ variables.push(CAPACIDAD_KG_PSJ);  query += "`CAPACIDAD_KG_PSJ`=?," ;}
-        if( NUMERO_DE_MOTOR != null){ variables.push(NUMERO_DE_MOTOR);  query += "`NUMERO_DE_MOTOR`=?,";}
-        if( VIN != null){ variables.push(VIN);  query += "`VIN`=?,";}
-        if( NUMERO_DE_SERIE != null){ variables.push(NUMERO_DE_SERIE);  query += "`NUMERO_DE_SERIE`=?,";}
-        if( NUMERO_DE_CHASIS != null){ variables.push(NUMERO_DE_CHASIS);  query += "`NUMERO_DE_CHASIS`=?," ;}
-        if( PROPIETARIO != null){ variables.push(PROPIETARIO);  query += "`PROPIETARIO`=?,";}
-        if( NIT != null){ variables.push(NIT);  query += "`NIT`=?,";}
-        if( POTENCIA != null){ variables.push(POTENCIA);  query += "`POTENCIA`=?,";}
-        if( DECLARACION_DE_IMPORTACION != null){ variables.push(DECLARACION_DE_IMPORTACION);  query += "`DECLARACION_DE_IMPORTACION`=?," ;}
-        if( FECHA_DE_IMPORTACION != null){ variables.push(FECHA_DE_IMPORTACION);  query += "`FECHA_DE_IMPORTACION`=?,";}
-        if( PUERTAS != null){ variables.push(PUERTAS);  query += "`PUERTAS`=?,";}
-        if( FECHA_MATRICULA != null){ variables.push(FECHA_MATRICULA);  query += "`FECHA_MATRICULA`=?,";}
-        if( FECHA_EXP_LIC_TTO != null){ variables.push(FECHA_EXP_LIC_TTO);  query += "`FECHA_EXP_LIC_TTO`=?" ;}
-        variables.push(ID);
-        query += " WHERE (`id` = ?);";
-        conexion.query(query,variables,callback);
-    }
+module.exports.ActualizarVehiculo = async(ID,ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
+    var variables = [];
+    var querystr = "UPDATE `heroku_d887aadfd8b0128`.`vehiculo` SET ";
+    if( ALIAS != null){ variables.push(ALIAS);    querystr += "`ALIAS`=?,";}
+    if( PLACA != null){ variables.push(PLACA);    querystr += "`PLACA`=?,";}
+    if( MARCA != null){ variables.push(MARCA);    querystr += "`MARCA`=?,";}
+    if( LINEA != null){ variables.push(LINEA);    querystr += "`LINEA`=?," ;}
+    if( MODELO != null){ variables.push(MODELO);  querystr += "`MODELO`=?,";}
+    if( CILINDRADA_CC != null){ variables.push(CILINDRADA_CC);  querystr += "`CILINDRADA_CC`=?,";}
+    if( COLOR != null){ variables.push(COLOR);                  querystr += "`COLOR`=?,";}
+    if( SERVICIO != null){ variables.push(SERVICIO);            querystr += "`SERVICIO`=?," ;}
+    if( CLASE_DE_VEHICULO != null){ variables.push(CLASE_DE_VEHICULO);      querystr += "`CLASE_DE_VEHICULO`=?,";}
+    if( TIPO_DE_CARROCERIA != null){ variables.push(TIPO_DE_CARROCERIA);    querystr += "`TIPO_DE_CARROCERIA`=?,";}
+    if( COMBUSTIBLE != null){ variables.push(COMBUSTIBLE);            querystr += "`COMBUSTIBLE`=?,";}
+    if( CAPACIDAD_KG_PSJ != null){ variables.push(CAPACIDAD_KG_PSJ);  querystr += "`CAPACIDAD_KG_PSJ`=?," ;}
+    if( NUMERO_DE_MOTOR != null){ variables.push(NUMERO_DE_MOTOR);    querystr += "`NUMERO_DE_MOTOR`=?,";}
+    if( VIN != null){ variables.push(VIN);  querystr += "`VIN`=?,";}
+    if( NUMERO_DE_SERIE != null){ variables.push(NUMERO_DE_SERIE);    querystr += "`NUMERO_DE_SERIE`=?,";}
+    if( NUMERO_DE_CHASIS != null){ variables.push(NUMERO_DE_CHASIS);  querystr += "`NUMERO_DE_CHASIS`=?," ;}
+    if( PROPIETARIO != null){ variables.push(PROPIETARIO);  querystr += "`PROPIETARIO`=?,";}
+    if( NIT != null){ variables.push(NIT);  querystr += "`NIT`=?,";}
+    if( POTENCIA != null){ variables.push(POTENCIA);  querystr += "`POTENCIA`=?,";}
+    if( DECLARACION_DE_IMPORTACION != null){ variables.push(DECLARACION_DE_IMPORTACION);  querystr += "`DECLARACION_DE_IMPORTACION`=?," ;}
+    if( FECHA_DE_IMPORTACION != null){ variables.push(FECHA_DE_IMPORTACION);  querystr += "`FECHA_DE_IMPORTACION`=?,";}
+    if( PUERTAS != null){ variables.push(PUERTAS);  querystr += "`PUERTAS`=?,";}
+    if( FECHA_MATRICULA != null){ variables.push(FECHA_MATRICULA);  querystr += "`FECHA_MATRICULA`=?,";}
+    if( FECHA_EXP_LIC_TTO != null){ variables.push(FECHA_EXP_LIC_TTO);  querystr += "`FECHA_EXP_LIC_TTO`=?" ;}
+    variables.push(ID);
+    querystr += " WHERE (`id` = ?);";
+    await query(querystr,variables,callback);
 }
 
 // DELETE VEHICULO
-module.exports.EliminarVehiculo = (ID,callback)=>{
-    if(conexion == null){ 
-        throw new Error("La variable de Conexion no ha sido definida");
-    }else{
-        conexion.query("DELETE FROM `heroku_d887aadfd8b0128`.`vehiculo` WHERE (`id` = ?);",[ID],callback);
-    }
+module.exports.EliminarVehiculo = async(ID,callback)=>{
+    await query("DELETE FROM `heroku_d887aadfd8b0128`.`vehiculo` WHERE (`id` = ?);",[ID],callback);
 }
+
 // get Placa
-module.exports.getID_Vehiculo = (PLACA,callback)=>{
-    if(conexion == null){ 
-        throw new Error("La variable de Conexion no ha sido definida");
-    }else{
-        conexion.query("SELECT id FROM heroku_d887aadfd8b0128.vehiculo WHERE (PLACA = ? );",[PLACA],callback);
-    }
+module.exports.getID_Vehiculo = async(PLACA,callback)=>{
+    await query("SELECT id FROM heroku_d887aadfd8b0128.vehiculo WHERE (PLACA = ? );",[PLACA],callback);
 }

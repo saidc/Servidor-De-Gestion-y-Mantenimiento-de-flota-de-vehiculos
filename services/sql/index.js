@@ -2,6 +2,7 @@
 var mysql = require("mysql");
 const sql_config = require("../../config/sql.js");
 const user = require("./CRUD/usuario.js");
+const vehiculo = require("./CRUD/vehiculo.js");
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))  
 var query = (query_str,input,callback)=>{
     console.log("Connecting to database");
@@ -28,5 +29,7 @@ var query = (query_str,input,callback)=>{
 }
 
 user.addQuery(query);
+vehiculo.addQuery(query);
 
 module.exports.user = user; 
+module.exports.vehiculo = vehiculo; 
