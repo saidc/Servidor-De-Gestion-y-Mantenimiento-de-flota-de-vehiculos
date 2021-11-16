@@ -8,6 +8,7 @@ var query = (query_str,input,callback)=>{
     console.log("Connecting to database");
     /** Recreate the connection, since the old one cannot be reused. */
     const conexion = mysql.createConnection(sql_config);
+    
     conexion.connect(async function(err) {          // The server is either down
         if(err) {                                   // or restarting (takes a while sometimes).
             //console.log('error when connecting to db:', err);

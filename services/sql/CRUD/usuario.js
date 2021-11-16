@@ -47,6 +47,6 @@
     
     //  Get user by USUARIO
     module.exports.GetUser_by_USUARIO = async (usuario,callback)=>{
-        await query("SELECT * FROM heroku_d887aadfd8b0128.usuario WHERE ( USUARIO = ? );",[usuario],callback);
+        await query("SELECT * FROM heroku_d887aadfd8b0128.usuario WHERE ( CORREO = ? );",[usuario],callback);
     }
 
