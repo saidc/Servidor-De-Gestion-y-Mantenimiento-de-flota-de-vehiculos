@@ -1,5 +1,7 @@
-var host = "http://127.0.0.1:3000";
-
+var URLdomain = window.location.host;
+var protocol = window.location.protocol
+var host = String(protocol)+"//"+String(URLdomain)//"http://127.0.0.1:3000";
+console.log(host)
 //inicializa evento del check burger
 burgercheckbox();
 
