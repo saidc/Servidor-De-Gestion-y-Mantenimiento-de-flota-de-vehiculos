@@ -1,14 +1,21 @@
+const db_config = require("../../../config/sql.js");
 // CRUD REPORTE
 var conexion = null;
+var DB_DATABASE = null;//db_config.DB_DATABASE ;
+
 module.exports.addConexion = (con)=>{
     conexion = con;
 }
+module.exports.addDB_DATABASE_NAME = (name)=>{
+    DB_DATABASE = name;
+}
+
 // CREATE    REPORTE
 module.exports.CrearReporte = (id_Vehiculo, FECHA, HORA, GRUPO, ALIAS, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA, callback)=>{
     if(conexion == null){ 
         throw new Error("La variable de Conexion no ha sido definida");
     }else{
-        conexion.query("INSERT INTO `heroku_d887aadfd8b0128`.`reporte` (`id_Vehiculo`, `FECHA`, `HORA`, `GRUPO`, `ALIAS`, `BATERIA`, `LATITUD`, `LONGITUD`, `SPEED`, `RPM`, `DISTANCE_W_MIL`, `DISTANCE_SINCE_DTC_CLEAR`, `ALERTA`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? );",[id_Vehiculo, FECHA, HORA, GRUPO, ALIAS, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA], callback);
+        conexion.query("INSERT INTO `123databasename321`.`reporte` (`id_Vehiculo`, `FECHA`, `HORA`, `GRUPO`, `ALIAS`, `BATERIA`, `LATITUD`, `LONGITUD`, `SPEED`, `RPM`, `DISTANCE_W_MIL`, `DISTANCE_SINCE_DTC_CLEAR`, `ALERTA`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? );",[id_Vehiculo, FECHA, HORA, GRUPO, ALIAS, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA], callback);
     }
 }
 // READ      REPORTE
@@ -16,7 +23,7 @@ module.exports.LeerReporte = (ID , callback)=>{
     if(conexion == null){ 
         throw new Error("La variable de Conexion no ha sido definida");
     }else{
-        conexion.query("SELECT * FROM heroku_d887aadfd8b0128.reporte WHERE (`id`= ? );",[ID],callback);
+        conexion.query("SELECT * FROM 123databasename321.reporte WHERE (`id`= ? );",[ID],callback);
     }
 }
 // UPDATE    REPORTE
@@ -25,7 +32,7 @@ module.exports.ActualizarReporte = (ID, id_Vehiculo, FECHA, HORA, GRUPO, ALIAS, 
         throw new Error("La variable de Conexion no ha sido definida");
     }else{
         var variables = [];
-        var query = "UPDATE `heroku_d887aadfd8b0128`.`reporte` SET ";
+        var query = "UPDATE `123databasename321`.`reporte` SET ";
          
         if( id_Vehiculo != null){ variables.push(id_Vehiculo); query += "`id_Vehiculo`=?,"; }
         if( FECHA != null){ variables.push(FECHA); query += "`FECHA`=?,"; }
@@ -51,7 +58,7 @@ module.exports.EliminarReporte= (ID,callback)=>{
     if(conexion == null){ 
         throw new Error("La variable de Conexion no ha sido definida");
     }else{
-        conexion.query("DELETE FROM `heroku_d887aadfd8b0128`.`reporte` WHERE (`id` = ?);",[ID],callback);
+        conexion.query("DELETE FROM `123databasename321`.`reporte` WHERE (`id` = ?);",[ID],callback);
     }
 }
 
@@ -61,7 +68,7 @@ module.exports.getReporte_por_id_fecha_hora = (ID, Fecha_inicial, Fecha_final, H
     if(conexion == null){ 
         throw new Error("La variable de Conexion no ha sido definida");
     }else{
-        //SELECT * FROM heroku_d887aadfd8b0128.reporte WHERE (id_Vehiculo = 5 and (FECHA between '2021-01-06' and '2021-01-07') and (HORA between '04:00:00' and '10:59:59' ));
-        conexion.query("SELECT * FROM heroku_d887aadfd8b0128.reporte WHERE (id_Vehiculo = ? and (FECHA between ? and ?) and (HORA between ? and ? ));",[ID,Fecha_inicial,Fecha_final,Hora_inicial,Hora_final],callback);
+        //SELECT * FROM 123databasename321.reporte WHERE (id_Vehiculo = 5 and (FECHA between '2021-01-06' and '2021-01-07') and (HORA between '04:00:00' and '10:59:59' ));
+        conexion.query("SELECT * FROM 123databasename321.reporte WHERE (id_Vehiculo = ? and (FECHA between ? and ?) and (HORA between ? and ? ));",[ID,Fecha_inicial,Fecha_final,Hora_inicial,Hora_final],callback);
     }
 }

@@ -7,26 +7,26 @@ module.exports.addQuery = (que)=>{
 }
 // CREATE VEHICULO
 module.exports.CrearVehiculo = async(ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
-    await query("INSERT INTO `heroku_d887aadfd8b0128`.`vehiculo` (`ALIAS`, `PLACA`, `MARCA`, `LINEA`, `MODELO`, `CILINDRADA CC`, `COLOR`, `SERVICIO`, `CLASE DE VEHICULO`, `TIPO DE CARROCERIA`, `COMBUSTIBLE`, `CAPACIDAD-KG-PSJ`, `NUMERO DE MOTOR`, `VIN`, `NUMERO DE SERIE`, `NUMERO DE CHASIS`, `PROPIETARIO`, `NIT`, `POTENCIA`, `DECLARACION DE IMPORTACION`, `FECHA DE IMPORTACION`, `PUERTAS`, `FECHA MATRICULA`, `FECHA EXP LIC TTO`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?);",[ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO], callback);
+    await query("INSERT INTO `123databasename321`.`vehiculo` (`ALIAS`, `PLACA`, `MARCA`, `LINEA`, `MODELO`, `CILINDRADA CC`, `COLOR`, `SERVICIO`, `CLASE DE VEHICULO`, `TIPO DE CARROCERIA`, `COMBUSTIBLE`, `CAPACIDAD-KG-PSJ`, `NUMERO DE MOTOR`, `VIN`, `NUMERO DE SERIE`, `NUMERO DE CHASIS`, `PROPIETARIO`, `NIT`, `POTENCIA`, `DECLARACION DE IMPORTACION`, `FECHA DE IMPORTACION`, `PUERTAS`, `FECHA MATRICULA`, `FECHA EXP LIC TTO`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?);",[ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO], callback);
 }
 // READ VEHICULO
 module.exports.getVehiculobyId = async(ID , callback)=>{
-    await query("SELECT * FROM heroku_d887aadfd8b0128.vehiculo WHERE (`id`= ? );",[ID],callback);
+    await query("SELECT * FROM 123databasename321.vehiculo WHERE (`id`= ? );",[ID],callback);
 }
 module.exports.getVehiculobyPlaca = async(Placa , callback)=>{
-    await query("SELECT * FROM heroku_d887aadfd8b0128.vehiculo WHERE (PLACA = UPPER(?));",[Placa],callback);
+    await query("SELECT * FROM 123databasename321.vehiculo WHERE (PLACA = UPPER(?));",[Placa],callback);
 }
 module.exports.getVehiculosPosNoRows = async ( PosicionFila ,NoFilas,callback)=>{
-    await query("SELECT PLACA,MARCA,MODELO,LINEA,COLOR,COMBUSTIBLE FROM heroku_d887aadfd8b0128.vehiculo LIMIT ?,?;",[PosicionFila,NoFilas],callback);
+    await query("SELECT PLACA,MARCA,MODELO,LINEA,COLOR,COMBUSTIBLE FROM 123databasename321.vehiculo LIMIT ?,?;",[PosicionFila,NoFilas],callback);
 }
 // obtienen el numero de vehiculos existentes
 module.exports.getNumberOfVehiculos = async ( callback)=>{
-    await query("SELECT COUNT(*) as NumRow FROM heroku_d887aadfd8b0128.vehiculo ;",[],callback);
+    await query("SELECT COUNT(*) as NumRow FROM 123databasename321.vehiculo ;",[],callback);
 }
 // UPDATE VEHICULO
 module.exports.ActualizarVehiculo = async(ID,ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
     var variables = [];
-    var querystr = "UPDATE `heroku_d887aadfd8b0128`.`vehiculo` SET ";
+    var querystr = "UPDATE `123databasename321`.`vehiculo` SET ";
     if( ALIAS != null){ variables.push(ALIAS);    querystr += "`ALIAS`=?,";}
     if( PLACA != null){ variables.push(PLACA);    querystr += "`PLACA`=?,";}
     if( MARCA != null){ variables.push(MARCA);    querystr += "`MARCA`=?,";}
@@ -58,10 +58,10 @@ module.exports.ActualizarVehiculo = async(ID,ALIAS, PLACA, MARCA, LINEA, MODELO,
 
 // DELETE VEHICULO
 module.exports.EliminarVehiculo = async(ID,callback)=>{
-    await query("DELETE FROM `heroku_d887aadfd8b0128`.`vehiculo` WHERE (`id` = ?);",[ID],callback);
+    await query("DELETE FROM `123databasename321`.`vehiculo` WHERE (`id` = ?);",[ID],callback);
 }
 
 // get Placa
 module.exports.getID_Vehiculo = async(PLACA,callback)=>{
-    await query("SELECT id FROM heroku_d887aadfd8b0128.vehiculo WHERE (PLACA = ? );",[PLACA],callback);
+    await query("SELECT id FROM 123databasename321.vehiculo WHERE (PLACA = ? );",[PLACA],callback);
 }

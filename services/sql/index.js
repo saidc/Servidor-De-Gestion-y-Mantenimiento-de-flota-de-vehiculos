@@ -4,11 +4,12 @@ const sql_config = require("../../config/sql.js");
 const user = require("./CRUD/usuario.js");
 const vehiculo = require("./CRUD/vehiculo.js");
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))  
+
 var query = (query_str,input,callback)=>{
     console.log("Connecting to database");
     /** Recreate the connection, since the old one cannot be reused. */
     const conexion = mysql.createConnection(sql_config);
-    
+    query_str = query_str.replace("123databasename321",String(sql_config.DB_DATABASE))
     conexion.connect(async function(err) {          // The server is either down
         if(err) {                                   // or restarting (takes a while sometimes).
             //console.log('error when connecting to db:', err);

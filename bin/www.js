@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const path = require("path");
 const config = require(path.join(__dirname,"../config/proyect.js"));
@@ -10,7 +11,7 @@ const io = require("socket.io")(http);
 const app = require("../app.js");
 
 http.listen(SOCKET_SERVER_PORT, () => {
-    console.log("Socket Server Is Running on Port: " + SOCKET_SERVER_PORT);
+  console.log("Socket Server Is Running on Port: " + SOCKET_SERVER_PORT);
 });
 
 io.on("connection", (socket) => {
@@ -21,12 +22,11 @@ io.on("connection", (socket) => {
     //We need to use the Socket (the link between the server and the connected user(s)).
     socket.emit("welcome", "Hello and Welcome to the Server");
     socket.on('server', (msg) => {
-    //--> //socket.emit("client", msg);
-    
-    //msg is the actual data which we can store in db
-    //msg can be obj, string, int
-    console.log('receive data from: ' +socket.id + ": "+ msg);
-  });
+      //--> //socket.emit("client", msg);
+      //msg is the actual data which we can store in db
+      //msg can be obj, string, int
+      console.log('receive data from: ' +socket.id + ": "+ msg);
+    });
 });
 
 const link1= "http://127.0.0.1:"
