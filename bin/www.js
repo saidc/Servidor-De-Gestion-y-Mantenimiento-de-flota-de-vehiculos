@@ -1,19 +1,18 @@
 
 require('dotenv').config();
 const path = require("path");
-const config = require(path.join(__dirname,"../config/proyect.js"));
+const config = require("../config/proyect.js");
 /** se Busca la configuracion del proyecto en /config */
 const PORT = config.PORT;
+
+const app = require("../app.js");
+/*
 const SOCKET_SERVER_PORT = config.SOCKET_SERVER_PORT;
 const http = require("http").createServer();
 const io = require("socket.io")(http);
-
-const app = require("../app.js");
-
 http.listen(SOCKET_SERVER_PORT, () => {
   console.log("Socket Server Is Running on Port: " + SOCKET_SERVER_PORT);
 });
-
 io.on("connection", (socket) => {
     //Socket is a Link to the Client
     console.log("New Client is Connected!", socket.id);
@@ -28,7 +27,7 @@ io.on("connection", (socket) => {
       console.log('receive data from: ' +socket.id + ": "+ msg);
     });
 });
-
+*/
 const link1= "http://127.0.0.1:"
 const link2= "http://localhost:"
 
