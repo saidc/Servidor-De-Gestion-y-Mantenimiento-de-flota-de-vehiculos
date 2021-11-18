@@ -1,14 +1,40 @@
-const {user,vehiculo} = require("../services/sql/index.js");
+const {user,vehiculo,reporte,usuario_vehiculo} = require("../services/sql/index.js");
 
 var bcrypt = require('bcryptjs'); // para generar hash de las contraseñas que se guardaran en la Base de datos 
+/*
+reporte.LeerReporte(1,(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
+*/
+usuario_vehiculo.GetUsuario_byPlaca("FWW725",(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
 
 
+/*
+vehiculo.getID_Vehiculo("FWW722",(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    if(results.constructor.name == "Array"){
+        console.log(results.length > 0);
+        console.log(results[0]);
+
+    }
+});
+*/
 var CrearVehiculo = async(ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO)=>{
     vehiculo.CrearVehiculo(ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO,(error, results, fields)=>{
         if(error){
             throw error;
         }
-        console.log(results); 
+        console.log(results ); 
     });
 };
             // ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO

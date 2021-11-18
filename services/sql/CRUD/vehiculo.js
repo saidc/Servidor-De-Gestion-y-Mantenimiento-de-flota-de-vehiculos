@@ -3,7 +3,7 @@ var query = (query_str,input,callback)=>{
     throw new Error("La variable de query no ha sido definida");
 };
 module.exports.addQuery = (que)=>{
-    query = que;
+    query = que; 
 }
 // CREATE VEHICULO
 module.exports.CrearVehiculo = async(ALIAS, PLACA, MARCA, LINEA, MODELO, CILINDRADA_CC, COLOR, SERVICIO, CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA, COMBUSTIBLE, CAPACIDAD_KG_PSJ, NUMERO_DE_MOTOR, VIN, NUMERO_DE_SERIE, NUMERO_DE_CHASIS, PROPIETARIO, NIT, POTENCIA, DECLARACION_DE_IMPORTACION, FECHA_DE_IMPORTACION, PUERTAS, FECHA_MATRICULA, FECHA_EXP_LIC_TTO, callback)=>{
