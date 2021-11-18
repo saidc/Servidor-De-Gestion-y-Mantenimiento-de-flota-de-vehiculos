@@ -35,7 +35,11 @@ app.use(express.json()); // ayuda a la lectura de req formato json en body
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/",indexRouter);
+    
 
 app.use(error); 
-
-module.exports = app ;
+  
+  
+module.exports  = {
+    app
+}
