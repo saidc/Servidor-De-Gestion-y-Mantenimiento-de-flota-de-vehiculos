@@ -2,12 +2,9 @@
 var onConnection = (socket) => {
     //Socket is a Link to the Client
     console.log("New Client is Connected!", socket.id);
-    //Here the client is connected and we can exchanged
-    //Send Message
-    //We need to use the Socket (the link between the server and the connected user(s)).
     //socket.emit("welcome", "Hello and Welcome to the Server");
     socket.on('server', (msg) => {
-      socket.emit("client", msg);
+      socket.emit("client", "OK"); // es necesario enviar de vuelta el mensaje recibido 
       var ok = {error: false, msg:msg}
       socket.emit("update",JSON.stringify(ok))
       console.log('receive data from: ' +socket.id + ": "+ msg);
