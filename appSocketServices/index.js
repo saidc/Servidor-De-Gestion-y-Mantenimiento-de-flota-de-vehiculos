@@ -3,24 +3,47 @@ var sql = require("../services/sql/index.js");
 var randomIntFromInterval = (min, max) =>{ // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
+
 var savedata = (data)=>{
   const obj = JSON.parse(data)
   if(typeof obj === 'object'){
     if(obj.hasOwnProperty("table_name")){
-      if(obj["table_name" == "report"]){
+      if(obj["table_name"] == "report"){
+        PLACA = null
+        FECHA = null
+        SPEED = null
+        RPM = null
+        LATITUD = null
+        LONGITUD = null
+        GRUPO = null
+        BATERIA = null
+        DISTANCE_W_MIL = null
+        DISTANCE_SINCE_DTC_CLEAR = null
+        ALERTA = null
 
-        if(obj.hasOwnProperty("PLACA"))                     {                     }
-        if(obj.hasOwnProperty("FECHA"))                     {                     }
-        if(obj.hasOwnProperty("SPEED"))                     {                     }
-        if(obj.hasOwnProperty("RPM"))                       {                     }
-        if(obj.hasOwnProperty("Position"))                  {                     }
+        if(obj.hasOwnProperty("PLACA"))                     { PLACA = obj["PLACA"];                                         }
+        if(obj.hasOwnProperty("FECHA"))                     { FECHA = obj["FECHA"];                                         }
+        if(obj.hasOwnProperty("SPEED"))                     { SPEED = obj["SPEED"];                                         }
+        if(obj.hasOwnProperty("RPM"))                       { RPM = obj["RPM"];                                             }
+        if(obj.hasOwnProperty("LATITUD"))                   { LATITUD = obj["LATITUD"];                                   }
+        if(obj.hasOwnProperty("LONGITUD"))                  { LONGITUD = obj["LONGITUD"];                                   }
+        //if(obj.hasOwnProperty("GRUPO"))                     { GRUPO = obj["GRUPO"];                                         }
+        //if(obj.hasOwnProperty("BATERIA"))                   { BATERIA = obj["BATERIA"];                                     }
+        if(obj.hasOwnProperty("DISTANCE_W_MIL"))            { DISTANCE_W_MIL = obj["DISTANCE_W_MIL"];                       }
+        if(obj.hasOwnProperty("DISTANCE_SINCE_DTC_CLEAR"))  { DISTANCE_SINCE_DTC_CLEAR = obj["DISTANCE_SINCE_DTC_CLEAR"];   }
+        if(obj.hasOwnProperty("ALERTA"))                    { ALERTA = obj["ALERTA"];                                       }
+        if(obj.hasOwnProperty("USER"))                      { USER   = obj["USER"];                                       }
+        
+        sql.reporte.CrearReporte(PLACA   ,FECHA               ,GRUPO,BATERIA,LATITUD             , LONGITUD            , SPEED              , RPM   , DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA,USER,(error, results, fields)=>{
+        //reporte.CrearReporte("FWW722", "21-11-18 15:19:02", null, null  ,"10.495770012974535", "-73.26421998702547", "84.80480961564261", "4000", null          , null                    , "sobre revolucionado",(error, results, fields)=>{
+            if(error){
+              //throw error;
+              print(error)
+            }
+            //console.log(results);
+        });
 
-      //if(obj.hasOwnProperty("GRUPO"))                     {                     }
-      //if(obj.hasOwnProperty("BATERIA"))                   {                     }
-        if(obj.hasOwnProperty("DISTANCE_W_MIL"))            {                     }
-        if(obj.hasOwnProperty("DISTANCE_SINCE_DTC_CLEAR"))  {                     }
-        if(obj.hasOwnProperty("ALERTA"))                    {                     }
-         
       }
     }
   }
@@ -34,13 +57,13 @@ var onConnection = (socket) => {
     socket.on('server', (msg) => {
       socket.emit("client", "OK"); // es necesario enviar de vuelta el mensaje recibido 
       if(sesion.car != null){
-        console.log("dispositivo "+socket.id +" esta autenticado " + sesion.car)
-        console.log('receive data from: ' +socket.id + ": "+ msg);
+        //console.log("dispositivo "+socket.id +" esta autenticado " + sesion.car)
+        //console.log('receive data from: ' +socket.id + ": "+ msg);
         savedata(msg)
         var ok = {error: false }
         socket.emit("update",JSON.stringify(ok))  
       }else{
-        console.log("no authenticado ")
+        //console.log("no authenticado ")
         socket.disconnect() // si un cliente no esta authenticado este lo desconectara
       }
     });
@@ -50,17 +73,20 @@ var onConnection = (socket) => {
           const obj = JSON.parse(msg)
           if(typeof obj === 'object'){
             if(obj.hasOwnProperty('PLACA')){
+              // se verifica si la placa corresponde a un vehiculo existente
               sql.vehiculo.getID_Vehiculo(obj["PLACA"],(error, results, fields)=>{
                 if(error){
                     throw error;
                 }
                 if(results.constructor.name == "Array"){
                     var ok = null
+                    // si hay una o mas respuestas entonces si es un vehiculo o
+                    // dispositivo el cual guardar datos o analizar
                     if(results.length > 0){
                       sesion.car = obj["PLACA"]
                       sesion.token = randomIntFromInterval(1000000, 1999999)
                       ok = {error: false,auth: true, token: randomIntFromInterval(1000000, 1999999)}
-                      console.log("authenticado correctamente")
+                      //console.log("authenticado correctamente")
                     }else{
                       ok = {error: false,auth: false}
                     }

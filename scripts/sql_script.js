@@ -9,13 +9,37 @@ reporte.LeerReporte(1,(error, results, fields)=>{
     console.log(results);
 });
 */
+/*
+{
+    "table_name": "report", 
+    "id": 1150073, 
+    "PLACA": "FWW722"
+    "FECHA": "21-11-18 15:19:02", 
+    "GRUPO": null, 
+    "BATERIA": null, 
+    "LATITUD": "10.495770012974535", 
+    "LONGITUD": "-73.26421998702547", 
+    "SPEED": "84.80480961564261", 
+    "RPM": "4000", 
+    "DISTANCE_W_MIL": null, 
+    "DISTANCE_SINCE_DTC_CLEAR": null, 
+    "ALERTA": "sobre revolucionado", 
+}
+ */
+reporte.CrearReporte("FWW722", "21-11-18 15:19:02", null, null, "10.495770012974535", "-73.26421998702547", "84.80480961564261", "4000", null, null, "sobre revolucionado",(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
+/*
 usuario_vehiculo.GetUsuario_byPlaca("FWW725",(error, results, fields)=>{
     if(error){
         throw error;
     }
     console.log(results);
 });
-
+*/
 
 /*
 vehiculo.getID_Vehiculo("FWW722",(error, results, fields)=>{
