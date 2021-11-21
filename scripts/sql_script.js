@@ -1,4 +1,4 @@
-const {user,vehiculo,reporte,usuario_vehiculo} = require("../services/sql/index.js");
+const {user,vehiculo,reporte,usuario_vehiculo,alert} = require("../services/sql/index.js");
 
 var bcrypt = require('bcryptjs'); // para generar hash de las contraseñas que se guardaran en la Base de datos 
 /*
@@ -26,12 +26,15 @@ reporte.LeerReporte(1,(error, results, fields)=>{
     "ALERTA": "sobre revolucionado", 
 }
  */
+
+/*
 reporte.CrearReporte("FWW722", "21-11-18 15:19:02", null, null, "10.495770012974535", "-73.26421998702547", "84.80480961564261", "4000", null, null, "sobre revolucionado",(error, results, fields)=>{
     if(error){
         throw error;
     }
     console.log(results);
 });
+*/
 /*
 usuario_vehiculo.GetUsuario_byPlaca("FWW725",(error, results, fields)=>{
     if(error){
@@ -40,6 +43,21 @@ usuario_vehiculo.GetUsuario_byPlaca("FWW725",(error, results, fields)=>{
     console.log(results);
 });
 */
+/*
+alert.LeerAlerta((error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
+*/
+
+alert.CrearAlerta( 'encendido', 'el vehiculo a sido encendido sin autorizacion , en latitud: 1234 , longitud:1234', 'elm327', 'media' , (error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results);
+});
 
 /*
 vehiculo.getID_Vehiculo("FWW722",(error, results, fields)=>{

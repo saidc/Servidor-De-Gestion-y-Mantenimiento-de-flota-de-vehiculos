@@ -4,6 +4,14 @@ var randomIntFromInterval = (min, max) =>{ // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+var CrearAlerta = (TIPODEALERTA, DESCRIPCION, PLACA, PRIORIDAD,FECHA)=>{
+  sql.alert.CrearAlerta(TIPODEALERTA, DESCRIPCION, PLACA, PRIORIDAD,FECHA, (error, results, fields)=>{
+    if(error){
+      console.log(error)
+    }
+    //console.log(results);
+  });
+}
 
 var savedata = (data)=>{
   const obj = JSON.parse(data)
@@ -26,14 +34,14 @@ var savedata = (data)=>{
         if(obj.hasOwnProperty("FECHA"))                     { FECHA = obj["FECHA"];                                         }
         if(obj.hasOwnProperty("SPEED"))                     { SPEED = obj["SPEED"];                                         }
         if(obj.hasOwnProperty("RPM"))                       { RPM = obj["RPM"];                                             }
-        if(obj.hasOwnProperty("LATITUD"))                   { LATITUD = obj["LATITUD"];                                   }
+        if(obj.hasOwnProperty("LATITUD"))                   { LATITUD = obj["LATITUD"];                                     }
         if(obj.hasOwnProperty("LONGITUD"))                  { LONGITUD = obj["LONGITUD"];                                   }
-        //if(obj.hasOwnProperty("GRUPO"))                     { GRUPO = obj["GRUPO"];                                         }
-        //if(obj.hasOwnProperty("BATERIA"))                   { BATERIA = obj["BATERIA"];                                     }
+        //if(obj.hasOwnProperty("GRUPO"))                   { GRUPO = obj["GRUPO"];                                         }
+        //if(obj.hasOwnProperty("BATERIA"))                 { BATERIA = obj["BATERIA"];                                     }
         if(obj.hasOwnProperty("DISTANCE_W_MIL"))            { DISTANCE_W_MIL = obj["DISTANCE_W_MIL"];                       }
         if(obj.hasOwnProperty("DISTANCE_SINCE_DTC_CLEAR"))  { DISTANCE_SINCE_DTC_CLEAR = obj["DISTANCE_SINCE_DTC_CLEAR"];   }
         if(obj.hasOwnProperty("ALERTA"))                    { ALERTA = obj["ALERTA"];                                       }
-        if(obj.hasOwnProperty("USER"))                      { USER   = obj["USER"];                                       }
+        if(obj.hasOwnProperty("USER"))                      { USER   = obj["USER"];                                         }
         
         sql.reporte.CrearReporte(PLACA   ,FECHA               ,GRUPO,BATERIA,LATITUD             , LONGITUD            , SPEED              , RPM   , DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA,USER,(error, results, fields)=>{
         //reporte.CrearReporte("FWW722", "21-11-18 15:19:02", null, null  ,"10.495770012974535", "-73.26421998702547", "84.80480961564261", "4000", null          , null                    , "sobre revolucionado",(error, results, fields)=>{
@@ -49,17 +57,84 @@ var savedata = (data)=>{
   }
 }
 
+var procesarData = (data,sesion)=>{
+  const obj = JSON.parse(data)
+  PLACA    = null
+  FECHA    = null
+  SPEED    = null
+  RPM      = null
+  USER     = null
+  LATITUD  = null
+  LONGITUD = null
+  ALERTA = null
+
+  if(obj.hasOwnProperty("PLACA"))    { PLACA = obj["PLACA"];       }
+  if(obj.hasOwnProperty("FECHA"))    { FECHA = obj["FECHA"];       }
+  if(obj.hasOwnProperty("SPEED"))    { SPEED = obj["SPEED"];       }
+  if(obj.hasOwnProperty("RPM"))      { RPM = obj["RPM"];           }
+  if(obj.hasOwnProperty("ALERTA"))   { ALERTA = obj["ALERTA"];     }
+  if(obj.hasOwnProperty("USER"))     { USER   = obj["USER"];       }
+  if(obj.hasOwnProperty("LATITUD"))  { LATITUD = obj["LATITUD"];   }
+  if(obj.hasOwnProperty("LONGITUD")) { LONGITUD = obj["LONGITUD"]; }
+  
+    // identificar Alerta de Carro encendido y sin authenticacion o usuario no autorizado  
+    if(ALERTA != null){
+      if(USER == null && ALERTA  != "apagado" ){
+        CrearAlerta('encendido', `Vehiculo encendido sin autorizacion, en LATITUD:${LATITUD} , LONGITUD:${LONGITUD}`, PLACA , 'media',FECHA)
+      }else if( USER != null && ALERTA  != "apagado" ){
+        sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA"],(error2, results2, fields2)=>{
+          if(error2){
+            console.log(error2)
+          }else{
+            console.log(results2);
+            if(results2.constructor.name == "Array"){
+              if(results2.length > 0){
+                sw = false;
+                for( var i = 0 ;i< results2.length ;i++){
+                  var email = results2[i]["CORREO"];
+                  if(email == USER){
+                    sw = true;
+                  }
+                }
+                if(!sw){
+                  CrearAlerta('encendido', `Vehiculo encendido por usuario no autorizado, en LATITUD:${LATITUD} , LONGITUD:${LONGITUD}`, PLACA , 'media',FECHA)
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    if(FECHA != null){
+      // identificar Alerta por sobre revolucion 
+      if(RPM != null){
+        if(RPM > 3000){
+          CrearAlerta('revolucion', `Vehiculo sobrepaso la revolucion maxima de 3000 RPM, con un valor de ${RPM}`, PLACA , 'baja',FECHA)
+        }
+      } 
+      // identificar Alerta por exceso de velocidad
+      if(SPEED != null){
+        if(SPEED > 100){
+          CrearAlerta('velocidad', `Vehiculo sobrepasó la velocidad maxima de 100 kmh, con un valor de ${SPEED}`, PLACA , 'baja',FECHA)
+        }
+      }
+    }
+}
+
 var onConnection = (socket) => {
     //Socket is a Link to the Client
     console.log("New Client is Connected!", socket.id);
     var sesion = { socket_id: socket.id , car: null}
-    //socket.emit("welcome", "Hello and Welcome to the Server");
+
     socket.on('server', (msg) => {
       socket.emit("client", "OK"); // es necesario enviar de vuelta el mensaje recibido 
+      // se verifica que el dispositivo haya sido autenticado
       if(sesion.car != null){
-        //console.log("dispositivo "+socket.id +" esta autenticado " + sesion.car)
-        //console.log('receive data from: ' +socket.id + ": "+ msg);
+        // se almacena la informacion recibida 
         savedata(msg)
+        // se procesa la data recibida
+        procesarData(msg,sesion)
         var ok = {error: false }
         socket.emit("update",JSON.stringify(ok))  
       }else{
@@ -67,6 +142,7 @@ var onConnection = (socket) => {
         socket.disconnect() // si un cliente no esta authenticado este lo desconectara
       }
     });
+    // solicitud de autenticacion 
     socket.on('auth', (msg) => {
       if(sesion.car == null){
         try{
