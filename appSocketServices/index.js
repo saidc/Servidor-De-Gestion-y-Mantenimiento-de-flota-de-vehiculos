@@ -119,6 +119,8 @@ var procesarData = (data,sesion)=>{
           CrearAlerta('velocidad', `Vehiculo sobrepasó la velocidad maxima de 100 kmh, con un valor de ${SPEED}`, PLACA , 'baja',FECHA)
         }
       }
+
+      // identificar 
     }
 }
 
