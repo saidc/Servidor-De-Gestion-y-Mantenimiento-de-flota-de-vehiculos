@@ -95,10 +95,12 @@ var sidebarnavelement = async (id)=>{
             }
             updateLoader("contentboxloader");
         }else{
+            console.log(res.error)
             addcontentbox.appendChild(createTable([]));
             updateLoader("contentboxloader");
         }
     } catch (error) {
+        console.log(error)
         addcontentbox.appendChild(createTable([]));
         updateLoader("contentboxloader");
     }
