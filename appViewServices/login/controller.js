@@ -22,7 +22,7 @@ module.exports  = {
                 const {USUARIO, PASSWORD} = results[0];
                 const isMatch = await bcrypt.compareSync(password,PASSWORD);
                 if(isMatch){
-                    req.session.isAuth = True;
+                    req.session.isAuth = true;
                     req.session.user = email;
                     return res.redirect('/home');
                 }else{
