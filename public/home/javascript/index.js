@@ -349,7 +349,7 @@ function cancel(id){
 
 var updateLogindata = (login)=>{
     document.getElementById("userboxemail").innerHTML = login.correo 
-    document.getElementById("userboxrol").innerHTML =  login.rol
+    document.getElementById("userboxrol").innerHTML =  String(login.rol).toLowerCase()
 }
 
 var initView = ()=>{
