@@ -347,6 +347,11 @@ function cancel(id){
     sidebarnavelement(id);
 }
 
+var updateLogindata = (login)=>{
+    document.getElementById("userboxemail").innerHTML = login.correo 
+    document.getElementById("userboxrol").innerHTML =  rol
+}
+
 var initView = ()=>{
     updateLoader("sidebarloader");
     fetch(host+"/api/homesidebar").then(response => {
@@ -355,6 +360,7 @@ var initView = ()=>{
         }
         return response.json();
     }).then(data => {
+        updateLogindata(data.login)
         if(!data.error){
             data.res.forEach((item, index)=>{
                 document.getElementById("sidebarnav").appendChild(createli(item.content,item.id,false));

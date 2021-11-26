@@ -218,6 +218,7 @@ var creatediv = (id)=>{
     div.setAttribute("id", id);
     return div;
 }
+
 var createh2 = (id,content)=>{
     var h2 = document.createElement('h2');
     h2.setAttribute("id", id);
@@ -232,6 +233,7 @@ var createspan = (id,content)=>{
     span.innerHTML= content;
     return span;
 }
+
 var createbutton = (id, content)=>{
     var button = document.createElement('button');
     button.setAttribute("id", id);

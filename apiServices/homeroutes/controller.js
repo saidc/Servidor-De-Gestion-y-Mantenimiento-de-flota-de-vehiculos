@@ -36,6 +36,7 @@ var sideItems = [
     {content: "Maintainance Planning", id: MaintainancePlanning_id},
     {content: "Alerts", id: Alerts_id},
 ];
+
 var users = [
     {Id: 1, Name: "User1" , LastName: "awef", Gender: "male", Email: "1" , Role: "random 1", IdCard: "123", Password: "345"},
     {Id: 2, Name: "User2" , LastName: "wefw", Gender: "male", Email: "2" , Role: "random 2", IdCard: "132", Password: "3t3"},
@@ -95,22 +96,27 @@ var IOTReports = [
 ];
 
 var getDataTypes = async(req, res)=>{
-    return res.status(200).json({error:false, dataLabels: dataLabels, dataVariables: dataVariables});
+    login = {correo: req.session.correo,rol: req.session.rol}
+    return res.status(200).json({error:false,login:login, dataLabels: dataLabels, dataVariables: dataVariables});
 }
 var getSidebarItems = async(req, res)=>{
-    return res.status(200).json({error: false, res: sideItems});
+    login = {correo: req.session.correo,rol: req.session.rol}
+    return res.status(200).json({error: false, login:login, res: sideItems});
 }
 
 var getUsers = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
     const {PosicionFila ,NoFilas, json} = req.body;
     var msg = {
         name: Users_id,
         num: users.length, 
         res: users
     };
-    return res.status(200).json({error:false, res:msg});
+    return res.status(200).json({error:false, login:login, res:msg});
 }
+
 var getVehicles = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
     const {PosicionFila ,NoFilas,json} = req.body;
     var msg = {
         name:Vehicles_id,
@@ -118,42 +124,47 @@ var getVehicles = async(req, res)=>{
         res:vehicles,
         report:IOTReports,
     };
-    return res.status(200).json({error:false, res:msg});
+    return res.status(200).json({error:false, login:login, res:msg});
 }
 var getVehicleTypes = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
         name:VehicleTypes_id,
         num:vehicleTypes.length, 
         res:vehicleTypes
     };
-    return res.status(200).json({error:false, res:msg});
+    return res.status(200).json({error:false, login:login, res:msg});
 }
 var getMaintainanceRoutine = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
         name:MaintainanceRoutine_id,
         num:maintainanceRoutines.length, 
         res:maintainanceRoutines
     };
-    return res.status(200).json({error:false, res:msg});
+    return res.status(200).json({error:false, login:login, res:msg});
 }
 var getMaintainancePlanning = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
         name:MaintainancePlanning_id,
         num:maintainancePlannings.length, 
         res:maintainancePlannings
     };
-    return res.status(200).json({error:false, res:msg});
+    return res.status(200).json({error:false, login:login, res:msg});
 }
 var getAlerts = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
         name:Alerts_id,
         num:alerts.length, 
         res:alerts
     };
-    return res.status(200).json({error:false, res:msg});
+    return res.status(200).json({error:false, login:login, res:msg});
 }
 // update functions
 var writeUsers = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var Id;
     var order;
@@ -168,9 +179,10 @@ var writeUsers = (req, res) => {
         data["Id"] = Id;
         users.push(data);
     }
-    return res.status(200).json({success: true, result: users});
+    return res.status(200).json({success: true, login:login, result: users});
 }
 var writeVehicles = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var Id;
     var order;
@@ -185,9 +197,10 @@ var writeVehicles = (req, res) => {
         data["Id"] = Id;
         vehicles.push(data);
     }
-    return res.status(200).json({success: true, result: vehicles});
+    return res.status(200).json({success: true, login:login, result: vehicles});
 }
 var writeVehicleTypes = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var Id;
     var order;
@@ -202,9 +215,10 @@ var writeVehicleTypes = (req, res) => {
         data["Id"] = Id;
         vehicleTypes.push(data);
     }
-    return res.status(200).json({success: true, result: vehicleTypes});
+    return res.status(200).json({success: true, login:login, result: vehicleTypes});
 }
 var writeMaintainanceRoutine = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var Id;
     var order;
@@ -219,9 +233,10 @@ var writeMaintainanceRoutine = (req, res) => {
         data["Id"] = Id;
         maintainanceRoutines.push(data);
     }
-    return res.status(200).json({success: true, result: maintainanceRoutines});
+    return res.status(200).json({success: true, login:login, result: maintainanceRoutines});
 }
 var writeMaintainancePlanning = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var Id;
     var order;
@@ -236,9 +251,10 @@ var writeMaintainancePlanning = (req, res) => {
         data["Id"] = Id;
         maintainancePlannings.push(data);
     }
-    return res.status(200).json({success: true, result: maintainancePlannings});
+    return res.status(200).json({success: true, login:login, result: maintainancePlannings});
 }
 var writeAlerts = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var Id;
     var order;
@@ -253,10 +269,11 @@ var writeAlerts = (req, res) => {
         data["Id"] = Id;
         alerts.push(data);
     }
-    return res.status(200).json({success: true, result: alerts});
+    return res.status(200).json({success: true, login:login, result: alerts});
 }
 // delete functions
 var deleteUsers = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
     if(data["Id"]) {
@@ -265,12 +282,13 @@ var deleteUsers = (req, res) => {
             if(item["Id"] == data["Id"]) order = index;
         });
         users.splice(order, 1);
-        return res.status(200).json({success: true, result: users});
+        return res.status(200).json({success: true, login:login, result: users});
     }else {
-        return res.status(200).json({success: false, result: users});
+        return res.status(200).json({success: false, login:login, result: users});
     }
 }
 var deleteVehicles = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
     if(data["Id"]) {
@@ -279,12 +297,13 @@ var deleteVehicles = (req, res) => {
             if(item["Id"] == data["Id"]) order = index;
         });
         vehicles.splice(order, 1);
-        return res.status(200).json({success: true, result: vehicles});
+        return res.status(200).json({success: true, login:login, result: vehicles});
     }else {
-        return res.status(200).json({success: false, result: vehicles});
+        return res.status(200).json({success: false, login:login, result: vehicles});
     }
 }
 var deleteVehicleTypes = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
     if(data["Id"]) {
@@ -293,12 +312,13 @@ var deleteVehicleTypes = (req, res) => {
             if(item["Id"] == data["Id"]) order = index;
         });
         vehicleTypes.splice(order, 1);
-        return res.status(200).json({success: true, result: vehicleTypes});
+        return res.status(200).json({success: true, login:login, result: vehicleTypes});
     }else {
-        return res.status(200).json({success: false, result: vehicleTypes});
+        return res.status(200).json({success: false, login:login, result: vehicleTypes});
     }
 }
 var deleteMaintainanceRoutine = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
     if(data["Id"]) {
@@ -307,13 +327,14 @@ var deleteMaintainanceRoutine = (req, res) => {
             if(item["Id"] == data["Id"]) order = index;
         });
         maintainanceRoutines.splice(order, 1);
-        return res.status(200).json({success: true, result: maintainanceRoutines});
+        return res.status(200).json({success: true, login:login, result: maintainanceRoutines});
     }else {
-        return res.status(200).json({success: false, result: maintainanceRoutines});
+        return res.status(200).json({success: false, login:login, result: maintainanceRoutines});
     }
 }
 
 var deleteMaintainancePlanning = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
     if(data["Id"]) {
@@ -322,13 +343,14 @@ var deleteMaintainancePlanning = (req, res) => {
             if(item["Id"] == data["Id"]) order = index;
         });
         maintainancePlannings.splice(order, 1);
-        return res.status(200).json({success: true, result: maintainancePlannings});
+        return res.status(200).json({success: true, login:login, result: maintainancePlannings});
     }else {
-        return res.status(200).json({success: false, result: maintainancePlannings});
+        return res.status(200).json({success: false, login:login, result: maintainancePlannings});
     }
 }
 
 var deleteAlerts = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
     if(data["Id"]) {
@@ -337,9 +359,9 @@ var deleteAlerts = (req, res) => {
             if(item["Id"] == data["Id"]) order = index;
         });
         alerts.splice(order, 1);
-        return res.status(200).json({success: true, result: alerts});
+        return res.status(200).json({success: true, login:login, result: alerts});
     }else {
-        return res.status(200).json({success: false, result: alerts});
+        return res.status(200).json({success: false, login:login, result: alerts});
     }
 }
 
