@@ -51,14 +51,14 @@ alert.LeerAlerta((error, results, fields)=>{
     console.log(results);
 });
 */
-
+/*
 alert.CrearAlerta( 'encendido', 'el vehiculo a sido encendido sin autorizacion , en latitud: 1234 , longitud:1234', 'elm327', 'media' , (error, results, fields)=>{
     if(error){
         throw error;
     }
     console.log(results);
 });
-
+*/
 /*
 vehiculo.getID_Vehiculo("FWW722",(error, results, fields)=>{
     if(error){
@@ -144,4 +144,9 @@ user.getNumberOfUsuarios((error, results, fields)=>{
     console.log(results[0].NumRow); 
 });
 */
-
+user.GetUser_by_USUARIO("saidjoc@gmail.com",(error, results, fields)=>{
+    if(error){
+        throw error;
+    }
+    console.log(results); 
+});

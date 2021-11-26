@@ -19,11 +19,13 @@ module.exports  = {
                 console.log(error)
                 return res.redirect('/login');}
             if(results.length > 0){
-                const {USUARIO, PASSWORD} = results[0];
+                const {ROL,CORREO, PASSWORD} = results[0];
                 const isMatch = await bcrypt.compareSync(password,PASSWORD);
                 if(isMatch){
                     req.session.isAuth = true;
                     req.session.user = email;
+                    req.session.correo = CORREO;
+                    req.session.rol = ROL;
                     return res.redirect('/home');
                 }else{
                     return res.redirect('/login');
