@@ -1,4 +1,4 @@
-var host = "http://127.0.0.1:3000";
+var host = "https://fast-chamber-47171.herokuapp.com:/"//"http://127.0.0.1:3000";
 
 var payload = {
     pageNo: 0, count: 10
