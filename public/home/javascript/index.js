@@ -1,4 +1,4 @@
-var host = window.location.hostname ;//"http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
+var host = "https://"+window.location.hostname ;//"http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
 console.log(window.location.hostname)
 console.log(window.location.href)
 var payload = {
@@ -364,6 +364,7 @@ var initView = ()=>{
         }
         updateLoader("sidebarloader");
     }).catch(error => {
+        console.log(error)
         document.getElementById("sidebarnav").appendChild(createli("error","error",true));
         updateLoader("sidebarloader");
     });
@@ -380,6 +381,7 @@ var initView = ()=>{
         sidebarnavelement( "Users");
         updateLoader("contentboxloader");
     }).catch(error => {
+        console.log(error)
         updateLoader("contentboxloader");
     });
 };
