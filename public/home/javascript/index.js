@@ -1,4 +1,4 @@
-var host = window.location.href ;//"http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
+var host = window.location.hostname ;//"http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
 console.log(window.location.hostname)
 console.log(window.location.href)
 var payload = {
@@ -59,6 +59,7 @@ var sidebarnavelement = async (id)=>{
     var addcontentbox = document.getElementById("addcontentbox");
     try {
         var res = await postJsonData(payload, id);
+        console.log(res)
         if(!(res.error )){
             var h2 = res.res.name;
             var numusers = res.res.num;
