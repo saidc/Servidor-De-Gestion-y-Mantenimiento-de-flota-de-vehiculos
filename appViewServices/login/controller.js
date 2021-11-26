@@ -22,8 +22,8 @@ module.exports  = {
                 const {USUARIO, PASSWORD} = results[0];
                 const isMatch = await bcrypt.compareSync(password,PASSWORD);
                 if(isMatch){
-                    req.session.isAuth = email;
-                    req.session.user = user;
+                    req.session.isAuth = True;
+                    req.session.user = email;
                     return res.redirect('/home');
                 }else{
                     return res.redirect('/login');
