@@ -1,4 +1,4 @@
-var host = "http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
+var host = window.location.href ;//"http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
 console.log(window.location.hostname)
 console.log(window.location.href)
 var payload = {
