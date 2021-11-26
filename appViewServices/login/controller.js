@@ -21,7 +21,7 @@ module.exports  = {
             if(results.length > 0){
                 const {ROL,CORREO, PASSWORD} = results[0];
                 const isMatch = await bcrypt.compareSync(password,PASSWORD);
-                if(isMatch){
+                if(isMatch && ROL == "ADMINISTRADOR"){
                     req.session.isAuth = true;
                     req.session.user = email;
                     req.session.correo = CORREO;
