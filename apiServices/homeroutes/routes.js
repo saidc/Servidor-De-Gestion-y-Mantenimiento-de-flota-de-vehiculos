@@ -10,33 +10,39 @@ router.get( "/homesidebar", isAuth, controller.getSidebarItems );
 // se envia la informacion de usuarios si se tiene permiso
 // get
 router.get( "/dataTypes", isAuth, controller.getDataTypes);
+
+router.post( "/updateoptionsforselect", isAuth, controller.updateoptionsforselect);
 // get functions
-router.post( "/Users"    , isAuth, controller.getUsers );
-router.post( "/Vehicles"   , isAuth, controller.getVehicles );
-router.post( "/VehicleTypes"   , isAuth, controller.getVehicleTypes );
-router.post( "/MaintainanceRoutine"   , isAuth, controller.getMaintainanceRoutine );
-router.post( "/MaintainancePlanning"   , isAuth, controller.getMaintainancePlanning );
-router.post( "/Alerts"     , isAuth, controller.getAlerts);
+router.post( "/Usuarios"    , isAuth, controller.getUsuarios );
+router.post( "/Vehiculos"   , isAuth, controller.getVehiculos );
+router.post( "/Tiposdevehiculos"   , isAuth, controller.getTiposdevehiculos );
+router.post( "/RutinasDeMantenimiento"   , isAuth, controller.getRutinasDeMantenimiento );
+router.post( "/PlaneacionesDeMantenimiento"   , isAuth, controller.getPlaneacionesDeMantenimiento );
+router.post( "/Alertas"     , isAuth, controller.getAlertas);
+router.post( "/VEHICULO_USUARIO"     , isAuth, controller.getVEHICULO_USUARIO);
 
 // update
-router.post( "/writeUsers"    , isAuth, controller.writeUsers );
-router.post( "/writeVehicles"   , isAuth, controller.writeVehicles );
-router.post( "/writeVehicleTypes"   , isAuth, controller.writeVehicleTypes );
-router.post( "/writeMaintainanceRoutine"   , isAuth, controller.writeMaintainanceRoutine );
-router.post( "/writeMaintainancePlanning"   , isAuth, controller.writeMaintainancePlanning );
-router.post( "/writeAlerts"     , isAuth, controller.writeAlerts);
+router.post( "/writeUsuarios"    , isAuth, controller.writeUsuarios );
+router.post( "/writeVehiculos"   , isAuth, controller.writeVehiculos );
+router.post( "/writeTiposdevehiculos"   , isAuth, controller.writeTiposdevehiculos );
+router.post( "/writeRutinasDeMantenimiento"   , isAuth, controller.writeRutinasDeMantenimiento );
+router.post( "/writePlaneacionesDeMantenimiento"   , isAuth, controller.writePlaneacionesDeMantenimiento );
+router.post( "/writeAlertas"     , isAuth, controller.writeAlertas);
+router.post( "/writeVEHICULO_USUARIO"     , isAuth, controller.writeVEHICULO_USUARIO);
+
 // delete
-router.post( "/deleteUsers"    , isAuth, controller.deleteUsers );
-router.post( "/deleteVehicles"   , isAuth, controller.deleteVehicles );
-router.post( "/deleteVehicleTypes"   , isAuth, controller.deleteVehicleTypes );
-router.post( "/deleteMaintainanceRoutine"   , isAuth, controller.deleteMaintainanceRoutine );
-router.post( "/deleteMaintainancePlanning"   , isAuth, controller.deleteMaintainancePlanning );
-router.post( "/deleteAlerts"     , isAuth, controller.deleteAlerts);
+router.post( "/deleteUsuarios"    , isAuth, controller.deleteUsuarios );
+router.post( "/deleteVehiculos"   , isAuth, controller.deleteVehiculos );
+router.post( "/deleteTiposdevehiculos"   , isAuth, controller.deleteTiposdevehiculos );
+router.post( "/deleteRutinasDeMantenimiento"   , isAuth, controller.deleteRutinasDeMantenimiento );
+router.post( "/deletePlaneacionesDeMantenimiento"   , isAuth, controller.deletePlaneacionesDeMantenimiento );
+router.post( "/deleteAlertas"     , isAuth, controller.deleteAlertas);
+router.post( "/deleteVEHICULO_USUARIO"     , isAuth, controller.deleteVEHICULO_USUARIO);
 
 
 /*
-router.post( "/Usuarios"    , isAuth, controller.getUsers       );
-router.post( "/Vehiculos"   , isAuth, controller.getVehicles    );
+router.post( "/Usuarios"    , isAuth, controller.getUsuarios       );
+router.post( "/Vehiculos"   , isAuth, controller.getVehiculos    );
 router.post( "/Alertas"     , isAuth, controller.getAlertas     );
 */
 module.exports = router;

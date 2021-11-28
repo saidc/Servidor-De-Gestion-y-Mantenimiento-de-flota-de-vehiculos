@@ -1,8 +1,9 @@
 
 var mysql = require("mysql");
 const sql_config = require("../../config/sql.js");
-const user = require("./CRUD/usuario.js");
+const usuario = require("./CRUD/usuario.js");
 const vehiculo = require("./CRUD/vehiculo.js");
+const tipodevehiculo = require("./CRUD/tipodevehiculo.js");
 const reporte = require("./CRUD/reporte.js")
 const usuario_vehiculo = require("./CRUD/usuariovehiculo.js")
 const alert = require("./CRUD/alerta.js")
@@ -33,14 +34,16 @@ var query = (query_str,input,callback)=>{
     }); 
 }
 
-user.addQuery(query);
+usuario.addQuery(query);
 vehiculo.addQuery(query);
 reporte.addQuery(query);
 usuario_vehiculo.addQuery(query);
 alert.addQuery(query);
+tipodevehiculo.addQuery(query);
 
-module.exports.user = user; 
+module.exports.usuario = usuario; 
 module.exports.vehiculo = vehiculo; 
 module.exports.reporte = reporte; 
 module.exports.usuario_vehiculo = usuario_vehiculo; 
-module.exports.alert = alert; 
+module.exports.alert = alert;
+module.exports.tipodevehiculo = tipodevehiculo;

@@ -4,12 +4,11 @@ var randomIntFromInterval = (min, max) =>{ // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-var CrearAlerta = (TIPODEALERTA, DESCRIPCION, PLACA, PRIORIDAD,FECHA)=>{
-  sql.alert.CrearAlerta(TIPODEALERTA, DESCRIPCION, PLACA, PRIORIDAD,FECHA, (error, results, fields)=>{
+var CrearAlerta = (TIPODEALERTA, DESCRIPCION, PLACA_DE_VEHICULO, PRIORIDAD,FECHA)=>{
+  sql.alert.CrearAlerta(TIPODEALERTA, DESCRIPCION, PLACA_DE_VEHICULO, PRIORIDAD,FECHA, (error, results, fields)=>{
     if(error){
       console.log(error)
     }
-    //console.log(results);
   });
 }
 
@@ -18,7 +17,7 @@ var savedata = (data)=>{
   if(typeof obj === 'object'){
     if(obj.hasOwnProperty("table_name")){
       if(obj["table_name"] == "report"){
-        PLACA = null
+        PLACA_DE_VEHICULO = null
         FECHA = null
         SPEED = null
         RPM = null
@@ -28,9 +27,9 @@ var savedata = (data)=>{
         BATERIA = null
         DISTANCE_W_MIL = null
         DISTANCE_SINCE_DTC_CLEAR = null
-        ALERTA = null
+        ESTADO_DE_VEHICULO = null
 
-        if(obj.hasOwnProperty("PLACA"))                     { PLACA = obj["PLACA"];                                         }
+        if(obj.hasOwnProperty("PLACA_DE_VEHICULO"))                     { PLACA_DE_VEHICULO = obj["PLACA_DE_VEHICULO"];                                         }
         if(obj.hasOwnProperty("FECHA"))                     { FECHA = obj["FECHA"];                                         }
         if(obj.hasOwnProperty("SPEED"))                     { SPEED = obj["SPEED"];                                         }
         if(obj.hasOwnProperty("RPM"))                       { RPM = obj["RPM"];                                             }
@@ -40,16 +39,13 @@ var savedata = (data)=>{
         //if(obj.hasOwnProperty("BATERIA"))                 { BATERIA = obj["BATERIA"];                                     }
         if(obj.hasOwnProperty("DISTANCE_W_MIL"))            { DISTANCE_W_MIL = obj["DISTANCE_W_MIL"];                       }
         if(obj.hasOwnProperty("DISTANCE_SINCE_DTC_CLEAR"))  { DISTANCE_SINCE_DTC_CLEAR = obj["DISTANCE_SINCE_DTC_CLEAR"];   }
-        if(obj.hasOwnProperty("ALERTA"))                    { ALERTA = obj["ALERTA"];                                       }
+        if(obj.hasOwnProperty("ESTADO_DE_VEHICULO"))        { ESTADO_DE_VEHICULO = obj["ESTADO_DE_VEHICULO"];               }
         if(obj.hasOwnProperty("USER"))                      { USER   = obj["USER"];                                         }
         
-        sql.reporte.CrearReporte(PLACA   ,FECHA               ,GRUPO,BATERIA,LATITUD             , LONGITUD            , SPEED              , RPM   , DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA,USER,(error, results, fields)=>{
-        //reporte.CrearReporte("FWW722", "21-11-18 15:19:02", null, null  ,"10.495770012974535", "-73.26421998702547", "84.80480961564261", "4000", null          , null                    , "sobre revolucionado",(error, results, fields)=>{
+        sql.reporte.CrearReporte(PLACA_DE_VEHICULO   ,FECHA               ,GRUPO,BATERIA,LATITUD             , LONGITUD            , SPEED              , RPM   , DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ESTADO_DE_VEHICULO,USER,(error, results, fields)=>{
             if(error){
-              //throw error;
               print(error)
             }
-            //console.log(results);
         });
 
       }
@@ -59,30 +55,30 @@ var savedata = (data)=>{
 
 var procesarData = (data,sesion)=>{
   const obj = JSON.parse(data)
-  PLACA    = null
+  PLACA_DE_VEHICULO    = null
   FECHA    = null
   SPEED    = null
   RPM      = null
   USER     = null
   LATITUD  = null
   LONGITUD = null
-  ALERTA = null
+  ESTADO_DE_VEHICULO = null
 
-  if(obj.hasOwnProperty("PLACA"))    { PLACA = obj["PLACA"];       }
+  if(obj.hasOwnProperty("PLACA_DE_VEHICULO"))    { PLACA_DE_VEHICULO = obj["PLACA_DE_VEHICULO"];       }
   if(obj.hasOwnProperty("FECHA"))    { FECHA = obj["FECHA"];       }
   if(obj.hasOwnProperty("SPEED"))    { SPEED = obj["SPEED"];       }
   if(obj.hasOwnProperty("RPM"))      { RPM = obj["RPM"];           }
-  if(obj.hasOwnProperty("ALERTA"))   { ALERTA = obj["ALERTA"];     }
+  if(obj.hasOwnProperty("ESTADO_DE_VEHICULO"))   { ESTADO_DE_VEHICULO = obj["ESTADO_DE_VEHICULO"];     }
   if(obj.hasOwnProperty("USER"))     { USER   = obj["USER"];       }
   if(obj.hasOwnProperty("LATITUD"))  { LATITUD = obj["LATITUD"];   }
   if(obj.hasOwnProperty("LONGITUD")) { LONGITUD = obj["LONGITUD"]; }
   
     // identificar Alerta de Carro encendido y sin authenticacion o usuario no autorizado  
-    if(ALERTA != null){
-      if(USER == null && ALERTA  != "apagado" ){
-        CrearAlerta('encendido', `Vehiculo encendido sin autorizacion, en LATITUD:${LATITUD} , LONGITUD:${LONGITUD}`, PLACA , 'media',FECHA)
-      }else if( USER != null && ALERTA  != "apagado" ){
-        sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA"],(error2, results2, fields2)=>{
+    if(ESTADO_DE_VEHICULO != null){
+      if(USER == null && ESTADO_DE_VEHICULO  != "apagado" ){
+        CrearAlerta('encendido', `Vehiculo encendido sin autorizacion, en LATITUD:${LATITUD} , LONGITUD:${LONGITUD}`, PLACA_DE_VEHICULO , 'media',FECHA)
+      }else if( USER != null && ESTADO_DE_VEHICULO  != "apagado" ){
+        sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA_DE_VEHICULO"],(error2, results2, fields2)=>{
           if(error2){
             console.log(error2)
           }else{
@@ -97,7 +93,7 @@ var procesarData = (data,sesion)=>{
                   }
                 }
                 if(!sw){
-                  CrearAlerta('encendido', `Vehiculo encendido por usuario no autorizado, en LATITUD:${LATITUD} , LONGITUD:${LONGITUD}`, PLACA , 'media',FECHA)
+                  CrearAlerta('encendido', `Vehiculo encendido por usuario no autorizado, en LATITUD:${LATITUD} , LONGITUD:${LONGITUD}`, PLACA_DE_VEHICULO , 'media',FECHA)
                 }
               }
             }
@@ -110,13 +106,13 @@ var procesarData = (data,sesion)=>{
       // identificar Alerta por sobre revolucion 
       if(RPM != null){
         if(RPM > 3000){
-          CrearAlerta('revolucion', `Vehiculo sobrepaso la revolucion maxima de 3000 RPM, con un valor de ${RPM}`, PLACA , 'baja',FECHA)
+          CrearAlerta('revolucion', `Vehiculo sobrepaso la revolucion maxima de 3000 RPM, con un valor de ${RPM}`, PLACA_DE_VEHICULO , 'baja',FECHA)
         }
       } 
       // identificar Alerta por exceso de velocidad
       if(SPEED != null){
         if(SPEED > 100){
-          CrearAlerta('velocidad', `Vehiculo sobrepasó la velocidad maxima de 100 kmh, con un valor de ${SPEED}`, PLACA , 'baja',FECHA)
+          CrearAlerta('velocidad', `Vehiculo sobrepasó la velocidad maxima de 100 kmh, con un valor de ${SPEED}`, PLACA_DE_VEHICULO , 'baja',FECHA)
         }
       }
 
@@ -150,9 +146,9 @@ var onConnection = (socket) => {
         try{
           const obj = JSON.parse(msg)
           if(typeof obj === 'object'){
-            if(obj.hasOwnProperty('PLACA')){
+            if(obj.hasOwnProperty('PLACA_DE_VEHICULO')){
               // se verifica si la placa corresponde a un vehiculo existente
-              sql.vehiculo.getID_Vehiculo(obj["PLACA"],(error, results, fields)=>{
+              sql.vehiculo.getID_Vehiculo(obj["PLACA_DE_VEHICULO"],(error, results, fields)=>{
                 if(error){
                     throw error;
                 }
@@ -161,7 +157,7 @@ var onConnection = (socket) => {
                     // si hay una o mas respuestas entonces si es un vehiculo o
                     // dispositivo el cual guardar datos o analizar
                     if(results.length > 0){
-                      sesion.car = obj["PLACA"]
+                      sesion.car = obj["PLACA_DE_VEHICULO"]
                       sesion.token = randomIntFromInterval(1000000, 1999999)
                       ok = {error: false,auth: true, token: randomIntFromInterval(1000000, 1999999)}
                       //console.log("authenticado correctamente")
@@ -171,7 +167,7 @@ var onConnection = (socket) => {
                     socket.emit("auth",JSON.stringify(ok)) 
                     // se buscara el usuario asignado a dicho vehiculo y se enviara 
                     if(ok.auth){
-                      sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA"],(error2, results2, fields2)=>{
+                      sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA_DE_VEHICULO"],(error2, results2, fields2)=>{
                         if(error){
                             throw error;
                         }

@@ -18,8 +18,8 @@ module.exports.addDB_DATABASE_NAME = (name)=>{
 }
 
 // CREATE    REPORTE
-module.exports.CrearReporte = async (PLACA, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA,USER, callback)=>{
-    await query("INSERT INTO `123databasename321`.`reporte` (`PLACA`, `FECHA`, `GRUPO`, `BATERIA`, `LATITUD`, `LONGITUD`, `SPEED`, `RPM`, `DISTANCE_W_MIL`, `DISTANCE_SINCE_DTC_CLEAR`, `ALERTA` , `USER`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? );",[PLACA, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA, USER], callback);
+module.exports.CrearReporte = async (PLACA_DE_VEHICULO, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ESTADO_DE_VEHICULO,USER, callback)=>{
+    await query("INSERT INTO `123databasename321`.`reporte` (`PLACA_DE_VEHICULO`, `FECHA`, `GRUPO`, `BATERIA`, `LATITUD`, `LONGITUD`, `SPEED`, `RPM`, `DISTANCE_W_MIL`, `DISTANCE_SINCE_DTC_CLEAR`, `ESTADO_DE_VEHICULO` , `USER`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? );",[PLACA_DE_VEHICULO, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ESTADO_DE_VEHICULO, USER], callback);
 }
 
 // READ      REPORTE
@@ -27,11 +27,11 @@ module.exports.LeerReporte = async (ID , callback)=>{
     await query("SELECT * FROM 123databasename321.reporte WHERE (`id`= ? );",[ID],callback);
 }
 // UPDATE    REPORTE
-module.exports.ActualizarReporte = async (ID, PLACA, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ALERTA, callback)=>{
+module.exports.ActualizarReporte = async (ID, PLACA_DE_VEHICULO, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ESTADO_DE_VEHICULO, callback)=>{
     var variables = [];
     var query_STR = "UPDATE `123databasename321`.`reporte` SET ";
      
-    if( PLACA != null){ variables.push(PLACA); query_STR += "`PLACA`=?,"; }
+    if( PLACA_DE_VEHICULO != null){ variables.push(PLACA_DE_VEHICULO); query_STR += "`PLACA_DE_VEHICULO`=?,"; }
     if( FECHA != null){ variables.push(FECHA); query_STR += "`FECHA`=?,"; }
     if( GRUPO != null){ variables.push(GRUPO); query_STR += "`GRUPO`=?,"; }
     if( BATERIA != null){ variables.push(BATERIA); query_STR += "`BATERIA`=?,"; }
@@ -41,7 +41,7 @@ module.exports.ActualizarReporte = async (ID, PLACA, FECHA, GRUPO, BATERIA, LATI
     if( RPM != null){ variables.push(RPM); query_STR += "`RPM`=?,"; }
     if( DISTANCE_W_MIL != null){ variables.push(DISTANCE_W_MIL); query_STR += "`DISTANCE_W_MIL`=?,"; }
     if( DISTANCE_SINCE_DTC_CLEAR != null){ variables.push(DISTANCE_SINCE_DTC_CLEAR); query_STR += "`DISTANCE_SINCE_DTC_CLEAR`=?,"; }
-    if( ALERTA != null){ variables.push(ALERTA); query_STR += "`ALERTA`=?"; }
+    if( ESTADO_DE_VEHICULO != null){ variables.push(ESTADO_DE_VEHICULO); query_STR += "`ESTADO_DE_VEHICULO`=?"; }
 
     variables.push(ID);
     query_STR += " WHERE (`id` = ?);";
@@ -52,6 +52,12 @@ module.exports.EliminarReporte= async (ID,callback)=>{
     await query("DELETE FROM `123databasename321`.`reporte` WHERE (`id` = ?);",[ID],callback);
 }
 // Get REPORT BETWEEN DOS FECHAS HORA
-module.exports.getReporte_por_id_fecha_hora = async (PLACA, Fecha_inicial, Fecha_final, callback)=>{
-    await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA = ? and (FECHA between ? and ?) );",[PLACA,Fecha_inicial,Fecha_final],callback);
+module.exports.getReporte_por_id_fecha_hora = async (PLACA_DE_VEHICULO, Fecha_inicial, Fecha_final, callback)=>{
+    await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ? and (FECHA between ? and ?) );",[PLACA_DE_VEHICULO,Fecha_inicial,Fecha_final],callback);
 }
+//  GetColums names
+module.exports.GetColumnsNames = async (callback)=>{
+    await query("SHOW COLUMNS FROM 123databasename321.reporte ;",[],callback);
+}
+
+var removechar=(str,pos)=>{ return ( pos >= str.length || pos < 0 || str.length == 0)? (str): (pos == 0)? (str.slice(1)): (pos == str.length -1 )? (str.slice(0,pos)) :(str.slice(0,pos)+str.slice(pos+1)) }

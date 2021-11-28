@@ -1,7 +1,7 @@
 
 const viewPaths = require("../../views/views.js");
 const valid     = require("../../microservices/Validator.js");
-const {user}       = require("../../services/sql/index.js");
+const {usuario}       = require("../../services/sql/index.js");
 var bcrypt = require('bcryptjs');
 
 module.exports  = {
@@ -13,7 +13,7 @@ module.exports  = {
         
         if(!valid.isValidEmail(email) || !valid.isValidPassword(password)){return res.redirect('/login');}
         
-        user.GetUser_by_USUARIO(email,async (error, results, fields)=>{
+        usuario.GetUser_by_USUARIO(email,async (error, results, fields)=>{
             console.log("llego aqui ")
             if(error){
                 console.log(error)

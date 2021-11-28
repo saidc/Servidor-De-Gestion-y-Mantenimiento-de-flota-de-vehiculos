@@ -25,9 +25,9 @@ html,body,#app{
   z-index: 1000;
   position: fixed;
   
-  width: 250px;
+  width: 280px;
   height: inherit;
-  margin-left: -250px;
+  margin-left: -280px;
   overflow-y: auto;
   background: var(--main-color--dark);
   -webkit-transition: all 0.5s ease;
@@ -39,7 +39,7 @@ html,body,#app{
     left: 50px;
   }
   .sidebaron{
-    left: 250px;
+    left: 280px;
   }
   
   #sidebar header {

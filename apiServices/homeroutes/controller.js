@@ -1,98 +1,113 @@
-const {user,vehiculo} = require("../../services/sql/index.js");
-
-var Users_id = "Users";
-var Vehicles_id = "Vehicles";
-var VehicleTypes_id = "VehicleTypes";
-var MaintainanceRoutine_id = "MaintainanceRoutine";
-var MaintainancePlanning_id = "MaintainancePlanning";
-var Alerts_id = "Alerts";
+const {usuario,vehiculo,reporte,usuario_vehiculo,alert,tipodevehiculo} = require("../../services/sql/index.js");
+var bcrypt = require('bcryptjs');
+var Usuarios_id = "Usuarios";
+var Vehiculos_id = "Vehiculos";
+var Tiposdevehiculos_id = "Tiposdevehiculos";
+var RutinasDeMantenimiento_id = "RutinasDeMantenimiento";
+var PlaneacionesDeMantenimiento_id = "PlaneacionesDeMantenimiento";
+var Alertas_id = "Alertas";
+var VEHICULO_USUARIO_id = "VEHICULO_USUARIO";
 
 var dataLabels = {
-    Users: ["Name", "Last Name", "Gender", "Id Card", "Role", "Email", "Password"],
-    Vehicles: ["Alias", "Plaque", "Vehicle Id", "Cilindrada cc", "Color", "Service", "Calse de Vehiculo", "Tipo de Carroceria", "Combustible", "Capacidad-kg-psj", "Numero de motor", "Vin", "Numero de Serie", "Numero de Chasis", "Propietario", "NIT", "Potencia", "Declaracion de importacion", "Fecha de importacion", "Puertas", "Fecha Matricula", "Fecha Exp Lic TTO"],
-    VehicleTypes: ["MARCA", "LINEA", "MODELO"],
-    MaintainanceRoutine: ["Vehiculo", "Tipo de vehiculo", "Estado", "Type", "Tiempo", "Medicion Time", "Distancia", "Medicion Dist", "Titulo", "Operacion", "Description"],
-    IOTReport: ["Date", "User", "Position", "Speed", "RPM", "Status"],
+    Usuarios: ["NOMBRE", "APELLIDO", "GENERO", "TARJETA", "ROL", "CORREO", "CEDULA", "PASSWORD"],
+    Vehiculos: ["ALIAS", "PLACA", "id_tipodevehiculo", "CILINDRADA CC", "COLOR", "SERVICIO", "CLASE DE VEHICULO", "TIPO DE CARROCERIA", "COMBUSTIBLE", "CAPACIDAD_KG_PSJ", "NUMERO DE MOTOR", "VIN", "NUMERO DE SERIE", "NUMERO DE CHASIS", "PROPIETARIO", "NIT", "POTENCIA", "DECLARACION DE IMPORTACION", "FECHA DE IMPORTACION", "PUERTAS", "FECHA MATRICULA", "FECHA EXP LIC TTO"],
+    Tiposdevehiculos: ["MARCA", "LINEA", "MODELO"],
+    RutinasDeMantenimiento: ["PLACA_DE_VEHICULO", "id_tipodevehiculo", "ESTADO_DE_RUTINA", "TIPO_DE_RUTINA", "TIEMPO", "MEDICION_DE_TIEMPO", "DISTANCIA", "MEDICION_DE_DISTANCIA", "TITULO", "OPERACION", "DESCRIPCION"],
+    PlaneacionesDeMantenimiento: ["PLACA_DE_VEHICULO", "id_rutinademantenimiento", "FECHAINICIAL", "FECHAFINAL", "ESTADO_DE_PLAN", "OBSERVACION"], 
+    Alertas: ["PLACA_DE_VEHICULO", "FECHA", "TIPODEALERTA", "PRIORIDAD", "DESCRIPCION"],   
+    IOTReport: ["PLACA_DE_VEHICULO","FECHA", "USER", "POSICION", "SPEED", "RPM", "ESTADO_DE_VEHICULO"],
     IOTFilterItem: ["Initial Date Time", "Final Date Time", "Status"],
-    MaintainancePlanning: ["Vehiculo", "Maintein Routin", "Initial Date", "Final Date", "State", "OBSERVATION"], 
-    Alerts: ["Vehiculo", "Date", "Type", "ID", "Details"],   
+    VEHICULO_USUARIO: ["PLACA_DE_VEHICULO", "CORREO_DE_USUARIO"],
 }
+
 var dataVariables = {
-    Users: ["Name", "LastName", "Gender", "IdCard", "Role", "Email", "Password"],
-    Vehicles: ["Alias", "Plaque", "VehicleTypeId", "Cilindrada", "Color", "Service", "Calse", "TipoCarroceria", "Combustible", "Capacidad", "motorNum", "Vin", "SerieNum", "ChasisNum", "Propietario", "NIT", "Potencia", "importacionDeclaracion", "importacionFecha", "Puertas", "FechaMatricula", "FechaExp"],
-    VehicleTypes: ["MARCA", "LINEA", "MODELO"],
-    MaintainanceRoutine: ["VehiculoName", "VehicleTypeId", "Estado", "Type", "Tiempo", "MedicionTime", "Distancia", "MedicionDist", "Titulo", "Operacion", "Description"],
-    IOTReport: ["Date", "User", "Position", "Speed", "RPM", "Status"],
+    Usuarios: ["NOMBRE", "APELLIDO", "GENERO", "TARJETA", "ROL", "CORREO", "CEDULA", "PASSWORD"],
+    Vehiculos: ['ALIAS', 'PLACA', 'id_tipodevehiculo', 'CILINDRADA CC','COLOR','SERVICIO','CLASE DE VEHICULO', 'TIPO DE CARROCERIA','COMBUSTIBLE','CAPACIDAD_KG_PSJ','NUMERO DE MOTOR','VIN','NUMERO DE SERIE','NUMERO DE CHASIS','PROPIETARIO','NIT','POTENCIA','DECLARACION DE IMPORTACION', 'FECHA DE IMPORTACION','PUERTAS','FECHA MATRICULA','FECHA EXP LIC TTO'],
+    Tiposdevehiculos: ["MARCA", "LINEA", "MODELO"],
+    RutinasDeMantenimiento: ["PLACA_DE_VEHICULO", "id_tipodevehiculo", "ESTADO_DE_RUTINA", "TIPO_DE_RUTINA", "TIEMPO", "MEDICION_DE_TIEMPO", "DISTANCIA", "MEDICION_DE_DISTANCIA", "TITULO", "OPERACION", "DESCRIPCION"],
+    PlaneacionesDeMantenimiento: ["PLACA_DE_VEHICULO", "id_rutinademantenimiento", "FECHAINICIAL", "FECHAFINAL", "ESTADO_DE_PLAN", "OBSERVACION"], 
+    Alertas: ["PLACA_DE_VEHICULO", "FECHA", "TIPODEALERTA", "PRIORIDAD", "DESCRIPCION"], 
+    IOTReport: ["PLACA_DE_VEHICULO","FECHA", "USER", "POSICION", "SPEED", "RPM", "ESTADO_DE_VEHICULO"],
     IOTFilterItem: ["InitialDateTime", "FinalDateTime", "Status"],
-    MaintainancePlanning: ["VehiculoName", "MainteinRoutin", "InitialDate", "FinalDate", "State", "OBSERVATION"], 
-    Alerts: ["VehiculoName", "Date", "Type", "ID", "Details"], 
+    VEHICULO_USUARIO: ["PLACA_DE_VEHICULO", "CORREO_DE_USUARIO"],
 }
 
 var sideItems = [
-    {content: "Users"  , id: Users_id},
-    {content: "Vehicles" , id: Vehicles_id},
-    {content: "VehicleTypes", id: VehicleTypes_id},
-    {content: "Maintainance Routine", id: MaintainanceRoutine_id},
-    {content: "Maintainance Planning", id: MaintainancePlanning_id},
-    {content: "Alerts", id: Alerts_id},
+    {content: "Usuarios"  , id: Usuarios_id},
+    {content: "Vehiculos" , id: Vehiculos_id},
+    {content: "Tipos de vehiculos", id: Tiposdevehiculos_id},
+    {content: "Rutinas De Mantenimiento", id: RutinasDeMantenimiento_id},
+    {content: "Planeaciones de Mantenimiento", id: PlaneacionesDeMantenimiento_id},
+    {content: "Alertas", id: Alertas_id},
+    {content: "Vehiculo - Usuario", id: VEHICULO_USUARIO_id},
 ];
 
-var users = [
-    {Id: 1, Name: "User1" , LastName: "awef", Gender: "male", Email: "1" , Role: "random 1", IdCard: "123", Password: "345"},
-    {Id: 2, Name: "User2" , LastName: "wefw", Gender: "male", Email: "2" , Role: "random 2", IdCard: "132", Password: "3t3"},
-    {Id: 3, Name: "User3" , LastName: "fwee", Gender: "female", Email: "3" , Role: "random 3", IdCard: "321", Password: "tg5"},
-    {Id: 4, Name: "User4" , LastName: "fwee", Gender: "male", Email: "6" , Role: "random 3", IdCard: "321", Password: "dfh"},
-    {Id: 5, Name: "User5" , LastName: "fwee", Gender: "female", Email: "2" , Role: "random 3", IdCard: "321", Password: "tg5"},
-    {Id: 6, Name: "User6" , LastName: "fwee", Gender: "male", Email: "8" , Role: "random 3", IdCard: "uim", Password: "rbt"},
-    {Id: 7, Name: "User7" , LastName: "cortes", Gender: "male", Email: "saidc@gmail.com" , Role: "Admin", IdCard: "uim", Password: "alskdjflakjsfd"},
+var Usuarios = [
+    {id: 1, NOMBRE: "User1" , APELLIDO: "awef" ,  GENERO: "male",   CORREO: "1" ,               ROL: "random 1", TARJETA: "123", CEDULA: "345"},
+    {id: 2, NOMBRE: "User2" , APELLIDO: "wefw" ,  GENERO: "male",   CORREO: "2" ,               ROL: "random 2", TARJETA: "132", CEDULA: "3t3"},
+    {id: 3, NOMBRE: "User3" , APELLIDO: "fwee" ,  GENERO: "female", CORREO: "3" ,               ROL: "random 3", TARJETA: "321", CEDULA: "tg5"},
+    {id: 4, NOMBRE: "User4" , APELLIDO: "fwee" ,  GENERO: "male",   CORREO: "6" ,               ROL: "random 3", TARJETA: "321", CEDULA: "dfh"},
+    {id: 5, NOMBRE: "User5" , APELLIDO: "fwee" ,  GENERO: "female", CORREO: "2" ,               ROL: "random 3", TARJETA: "321", CEDULA: "tg5"},
+    {id: 6, NOMBRE: "User6" , APELLIDO: "fwee" ,  GENERO: "male",   CORREO: "8" ,               ROL: "random 3", TARJETA: "uim", CEDULA: "rbt"},
+    {id: 7, NOMBRE: "User7" , APELLIDO: "cortes", GENERO: "male",   CORREO: "saidc@gmail.com" , ROL: "ADMINISTRADOR",    TARJETA: "uim", CEDULA: "10947516488"},
 ];
-var vehicles = [
-    {Id: 1, Alias: "User1" , Plaque: "awef", VehicleTypeId: "sfew", Cilindrada: "male", Color: "1" , Service: "random 1", Calse: "123", TipoCarroceria: "345", Combustible: "345", Capacidad: "345", motorNum: "345", Vin: "345", SerieNum: "345", ChasisNum: "345", Propietario: "345", NIT: "345", Potencia: "345", importacionDeclaracion: "345", importacionFecha: "345", Puertas: "345", FechaMatricula: "345", FechaExp: "345"},
-    {Id: 2, Alias: "User2" , Plaque: "wefw", VehicleTypeId: "awef", Cilindrada: "male", Color: "2" , Service: "random 2", Calse: "132", TipoCarroceria: "3t3", Combustible: "345", Capacidad: "345", motorNum: "345", Vin: "345", SerieNum: "345", ChasisNum: "345", Propietario: "345", NIT: "345", Potencia: "345", importacionDeclaracion: "345", importacionFecha: "345", Puertas: "345", FechaMatricula: "345", FechaExp: "345"},
-    {Id: 3, Alias: "User3" , Plaque: "fwee", VehicleTypeId: "efew", Cilindrada: "fema", Color: "3" , Service: "random 3", Calse: "321", TipoCarroceria: "tg5", Combustible: "345", Capacidad: "345", motorNum: "345", Vin: "345", SerieNum: "345", ChasisNum: "345", Propietario: "345", NIT: "345", Potencia: "345", importacionDeclaracion: "345", importacionFecha: "345", Puertas: "345", FechaMatricula: "345", FechaExp: "345"},
-    {Id: 4, Alias: "User4" , Plaque: "fwee", VehicleTypeId: "awef", Cilindrada: "male", Color: "6" , Service: "random 3", Calse: "321", TipoCarroceria: "dfh", Combustible: "345", Capacidad: "345", motorNum: "345", Vin: "345", SerieNum: "345", ChasisNum: "345", Propietario: "345", NIT: "345", Potencia: "345", importacionDeclaracion: "345", importacionFecha: "345", Puertas: "345", FechaMatricula: "345", FechaExp: "345"},
-    {Id: 5, Alias: "User5" , Plaque: "fwee", VehicleTypeId: "gegr", Cilindrada: "fema", Color: "2" , Service: "random 3", Calse: "321", TipoCarroceria: "tg5", Combustible: "345", Capacidad: "345", motorNum: "345", Vin: "345", SerieNum: "345", ChasisNum: "345", Propietario: "345", NIT: "345", Potencia: "345", importacionDeclaracion: "345", importacionFecha: "345", Puertas: "345", FechaMatricula: "345", FechaExp: "345"},
-    {Id: 6, Alias: "User6" , Plaque: "fwee", VehicleTypeId: "awef", Cilindrada: "male", Color: "8" , Service: "random 3", Calse: "uim", TipoCarroceria: "rbt", Combustible: "345", Capacidad: "345", motorNum: "345", Vin: "345", SerieNum: "345", ChasisNum: "345", Propietario: "345", NIT: "345", Potencia: "345", importacionDeclaracion: "345", importacionFecha: "345", Puertas: "345", FechaMatricula: "345", FechaExp: "345"},
+
+var Vehiculos = [
+    {id: 1, ALIAS: "User1" , PLACA: "awef", id_tipodevehiculo: "sfew", 'CILINDRADA CC': "male", COLOR: "1" , SERVICIO: "random 1", 'CLASE DE VEHICULO': "123", 'TIPO DE CARROCERIA': "345", COMBUSTIBLE: "345", CAPACIDAD_KG_PSJ: "345", 'NUMERO DE MOTOR': "345", VIN: "345", 'NUMERO DE SERIE': "345", 'NUMERO DE CHASIS': "345", PROPIETARIO: "345", NIT: "345", POTENCIA: "345", 'DECLARACION DE IMPORTACION': "345", 'FECHA DE IMPORTACION': "345", PUERTAS: "345", 'FECHA MATRICULA': "345", 'FECHA EXP LIC TTO': "345"},
+    {id: 2, ALIAS: "User2" , PLACA: "wefw", id_tipodevehiculo: "awef", 'CILINDRADA CC': "male", COLOR: "2" , SERVICIO: "random 2", 'CLASE DE VEHICULO': "132", 'TIPO DE CARROCERIA': "3t3", COMBUSTIBLE: "345", CAPACIDAD_KG_PSJ: "345", 'NUMERO DE MOTOR': "345", VIN: "345", 'NUMERO DE SERIE': "345", 'NUMERO DE CHASIS': "345", PROPIETARIO: "345", NIT: "345", POTENCIA: "345", 'DECLARACION DE IMPORTACION': "345", 'FECHA DE IMPORTACION': "345", PUERTAS: "345", 'FECHA MATRICULA': "345", 'FECHA EXP LIC TTO': "345"},
+    {id: 3, ALIAS: "User3" , PLACA: "fwee", id_tipodevehiculo: "efew", 'CILINDRADA CC': "fema", COLOR: "3" , SERVICIO: "random 3", 'CLASE DE VEHICULO': "321", 'TIPO DE CARROCERIA': "tg5", COMBUSTIBLE: "345", CAPACIDAD_KG_PSJ: "345", 'NUMERO DE MOTOR': "345", VIN: "345", 'NUMERO DE SERIE': "345", 'NUMERO DE CHASIS': "345", PROPIETARIO: "345", NIT: "345", POTENCIA: "345", 'DECLARACION DE IMPORTACION': "345", 'FECHA DE IMPORTACION': "345", PUERTAS: "345", 'FECHA MATRICULA': "345", 'FECHA EXP LIC TTO': "345"},
+    {id: 4, ALIAS: "User4" , PLACA: "fwee", id_tipodevehiculo: "awef", 'CILINDRADA CC': "male", COLOR: "6" , SERVICIO: "random 3", 'CLASE DE VEHICULO': "321", 'TIPO DE CARROCERIA': "dfh", COMBUSTIBLE: "345", CAPACIDAD_KG_PSJ: "345", 'NUMERO DE MOTOR': "345", VIN: "345", 'NUMERO DE SERIE': "345", 'NUMERO DE CHASIS': "345", PROPIETARIO: "345", NIT: "345", POTENCIA: "345", 'DECLARACION DE IMPORTACION': "345", 'FECHA DE IMPORTACION': "345", PUERTAS: "345", 'FECHA MATRICULA': "345", 'FECHA EXP LIC TTO': "345"},
+    {id: 5, ALIAS: "User5" , PLACA: "fwee", id_tipodevehiculo: "gegr", 'CILINDRADA CC': "fema", COLOR: "2" , SERVICIO: "random 3", 'CLASE DE VEHICULO': "321", 'TIPO DE CARROCERIA': "tg5", COMBUSTIBLE: "345", CAPACIDAD_KG_PSJ: "345", 'NUMERO DE MOTOR': "345", VIN: "345", 'NUMERO DE SERIE': "345", 'NUMERO DE CHASIS': "345", PROPIETARIO: "345", NIT: "345", POTENCIA: "345", 'DECLARACION DE IMPORTACION': "345", 'FECHA DE IMPORTACION': "345", PUERTAS: "345", 'FECHA MATRICULA': "345", 'FECHA EXP LIC TTO': "345"},
+    {id: 6, ALIAS: "User6" , PLACA: "fwee", id_tipodevehiculo: "awef", 'CILINDRADA CC': "male", COLOR: "8" , SERVICIO: "random 3", 'CLASE DE VEHICULO': "uim", 'TIPO DE CARROCERIA': "rbt", COMBUSTIBLE: "345", CAPACIDAD_KG_PSJ: "345", 'NUMERO DE MOTOR': "345", VIN: "345", 'NUMERO DE SERIE': "345", 'NUMERO DE CHASIS': "345", PROPIETARIO: "345", NIT: "345", POTENCIA: "345", 'DECLARACION DE IMPORTACION': "345", 'FECHA DE IMPORTACION': "345", PUERTAS: "345", 'FECHA MATRICULA': "345", 'FECHA EXP LIC TTO': "345"},
 ];
-var vehicleTypes = [
-    {Id: 1, MARCA: "CarType1" , LINEA: "awef", MODELO: "model1" },
-    {Id: 2, MARCA: "CarType2" , LINEA: "wefw", MODELO: "model2" },
-    {Id: 3, MARCA: "CarType3" , LINEA: "fwee", MODELO: "model3" },
-    {Id: 4, MARCA: "CarType4" , LINEA: "fwee", MODELO: "model4" },
-    {Id: 5, MARCA: "CarType5" , LINEA: "fwee", MODELO: "model5" },
-    {Id: 6, MARCA: "CarType6" , LINEA: "fwee", MODELO: "model6" },
+
+var Tiposdevehiculos = [
+    {id: 1, MARCA: "CarType1" , LINEA: "awef", MODELO: "model1" },
+    {id: 2, MARCA: "CarType2" , LINEA: "wefw", MODELO: "model2" },
+    {id: 3, MARCA: "CarType3" , LINEA: "fwee", MODELO: "model3" },
+    {id: 4, MARCA: "CarType4" , LINEA: "fwee", MODELO: "model4" },
+    {id: 5, MARCA: "CarType5" , LINEA: "fwee", MODELO: "model5" },
+    {id: 6, MARCA: "CarType6" , LINEA: "fwee", MODELO: "model6" },
 ]
-var maintainanceRoutines = [
-    {Id: 1, VehiculoName: "User1" , VehicleTypeId: "awef", Estado: "male", Type: "male", Tiempo: "1" , MedicionTime: "random 1", Distancia: "123", MedicionDist: "345", Titulo: "345", Operacion: "345", Description: "345"},
-    {Id: 2, VehiculoName: "User2" , VehicleTypeId: "wefw", Estado: "male", Type: "male", Tiempo: "2" , MedicionTime: "random 2", Distancia: "132", MedicionDist: "3t3", Titulo: "345", Operacion: "345", Description: "345"},
-    {Id: 3, VehiculoName: "User3" , VehicleTypeId: "fwee", Estado: "male", Type: "fele", Tiempo: "3" , MedicionTime: "random 3", Distancia: "321", MedicionDist: "tg5", Titulo: "345", Operacion: "345", Description: "345"},
-    {Id: 4, VehiculoName: "User4" , VehicleTypeId: "fwee", Estado: "male", Type: "male", Tiempo: "6" , MedicionTime: "random 3", Distancia: "321", MedicionDist: "dfh", Titulo: "345", Operacion: "345", Description: "345"},
-    {Id: 5, VehiculoName: "User5" , VehicleTypeId: "fwee", Estado: "male", Type: "feme", Tiempo: "2" , MedicionTime: "random 3", Distancia: "321", MedicionDist: "tg5", Titulo: "345", Operacion: "345", Description: "345"},
-    {Id: 6, VehiculoName: "User6" , VehicleTypeId: "fwee", Estado: "male", Type: "male", Tiempo: "8" , MedicionTime: "random 3", Distancia: "uim", MedicionDist: "rbt", Titulo: "345", Operacion: "345", Description: "345"},
+var RutinasDeMantenimiento = [
+    {id: 1, PLACA_DE_VEHICULO: "User1" , id_tipodevehiculo: "awef", ESTADO_DE_RUTINA: "male", TIPO_DE_RUTINA: "PREVENTIVO", TIEMPO: "1" , MEDICION_DE_TIEMPO: "random 1", DISTANCIA: "123", MEDICION_DE_DISTANCIA: "345", TITULO: "345", OPERACION: "345", DESCRIPCION: "345"},
+    {id: 2, PLACA_DE_VEHICULO: "User2" , id_tipodevehiculo: "wefw", ESTADO_DE_RUTINA: "male", TIPO_DE_RUTINA: "CORRECTIVO", TIEMPO: "2" , MEDICION_DE_TIEMPO: "random 2", DISTANCIA: "132", MEDICION_DE_DISTANCIA: "3t3", TITULO: "345", OPERACION: "345", DESCRIPCION: "345"},
+    {id: 3, PLACA_DE_VEHICULO: "User3" , id_tipodevehiculo: "fwee", ESTADO_DE_RUTINA: "male", TIPO_DE_RUTINA: "PREVENTIVO", TIEMPO: "3" , MEDICION_DE_TIEMPO: "random 3", DISTANCIA: "321", MEDICION_DE_DISTANCIA: "tg5", TITULO: "345", OPERACION: "345", DESCRIPCION: "345"},
+    {id: 4, PLACA_DE_VEHICULO: "User4" , id_tipodevehiculo: "fwee", ESTADO_DE_RUTINA: "male", TIPO_DE_RUTINA: "CORRECTIVO", TIEMPO: "6" , MEDICION_DE_TIEMPO: "random 3", DISTANCIA: "321", MEDICION_DE_DISTANCIA: "dfh", TITULO: "345", OPERACION: "345", DESCRIPCION: "345"},
+    {id: 5, PLACA_DE_VEHICULO: "User5" , id_tipodevehiculo: "fwee", ESTADO_DE_RUTINA: "male", TIPO_DE_RUTINA: "PREVENTIVO", TIEMPO: "2" , MEDICION_DE_TIEMPO: "random 3", DISTANCIA: "321", MEDICION_DE_DISTANCIA: "tg5", TITULO: "345", OPERACION: "345", DESCRIPCION: "345"},
+    {id: 6, PLACA_DE_VEHICULO: "User6" , id_tipodevehiculo: "fwee", ESTADO_DE_RUTINA: "male", TIPO_DE_RUTINA: "CORRECTIVO", TIEMPO: "8" , MEDICION_DE_TIEMPO: "random 3", DISTANCIA: "uim", MEDICION_DE_DISTANCIA: "rbt", TITULO: "345", OPERACION: "345", DESCRIPCION: "345"},
 ];
-var maintainancePlannings = [
-    {Id: 1, VehiculoName: "Vehiculo1" , MainteinRoutin: "awef", InitialDate: "male", FinalDate: "1" , State: "random 1", OBSERVATION: "123"},
-    {Id: 2, VehiculoName: "Vehiculo2" , MainteinRoutin: "wefw", InitialDate: "male", FinalDate: "2" , State: "random 2", OBSERVATION: "132"},
-    {Id: 3, VehiculoName: "Vehiculo3" , MainteinRoutin: "fwee", InitialDate: "fema", FinalDate: "3" , State: "random 3", OBSERVATION: "321"},
-    {Id: 4, VehiculoName: "Vehiculo4" , MainteinRoutin: "fwee", InitialDate: "male", FinalDate: "6" , State: "random 3", OBSERVATION: "321"},
-    {Id: 5, VehiculoName: "Vehiculo5" , MainteinRoutin: "fwee", InitialDate: "feme", FinalDate: "2" , State: "random 3", OBSERVATION: "321"},
-    {Id: 6, VehiculoName: "Vehiculo6" , MainteinRoutin: "fwee", InitialDate: "male", FinalDate: "8" , State: "random 3", OBSERVATION: "uim"},
+var PlaneacionesDeMantenimiento = [
+    {id: 1, PLACA_DE_VEHICULO: "Vehiculo1" , id_rutinademantenimiento: "awef", FECHAINICIAL: "male", FECHAFINAL: "1" , ESTADO_DE_PLAN: "EXITOSO"  , OBSERVACION: "123"},
+    {id: 2, PLACA_DE_VEHICULO: "Vehiculo2" , id_rutinademantenimiento: "wefw", FECHAINICIAL: "male", FECHAFINAL: "2" , ESTADO_DE_PLAN: "ESPERA"   , OBSERVACION: "132"},
+    {id: 3, PLACA_DE_VEHICULO: "Vehiculo3" , id_rutinademantenimiento: "fwee", FECHAINICIAL: "fema", FECHAFINAL: "3" , ESTADO_DE_PLAN: "CANCELADO", OBSERVACION: "321"},
+    {id: 4, PLACA_DE_VEHICULO: "Vehiculo4" , id_rutinademantenimiento: "fwee", FECHAINICIAL: "male", FECHAFINAL: "6" , ESTADO_DE_PLAN: "EXITOSO"  , OBSERVACION: "321"},
+    {id: 5, PLACA_DE_VEHICULO: "Vehiculo5" , id_rutinademantenimiento: "fwee", FECHAINICIAL: "feme", FECHAFINAL: "2" , ESTADO_DE_PLAN: "ESPERA"   , OBSERVACION: "321"},
+    {id: 6, PLACA_DE_VEHICULO: "Vehiculo6" , id_rutinademantenimiento: "fwee", FECHAINICIAL: "male", FECHAFINAL: "8" , ESTADO_DE_PLAN: "CANCELADO", OBSERVACION: "uim"},
 ];
-var alerts = [
-    {Id: 1, VehiculoName: "Vehiculo1" , Date: "awef", Type: "male", ID: "1" , Details: "random 1"},
-    {Id: 2, VehiculoName: "Vehiculo2" , Date: "wefw", Type: "male", ID: "2" , Details: "random 2"},
-    {Id: 3, VehiculoName: "Vehiculo3" , Date: "fwee", Type: "fele", ID: "3" , Details: "random 3"},
-    {Id: 4, VehiculoName: "Vehiculo4" , Date: "fwee", Type: "mope", ID: "6" , Details: "random 3"},
-    {Id: 5, VehiculoName: "Vehiculo5" , Date: "fwee", Type: "fale", ID: "2" , Details: "random 3"},
-    {Id: 6, VehiculoName: "Vehiculo6" , Date: "fwee", Type: "male", ID: "8" , Details: "random 3"},
+var Alertas = [
+    {id: 1, PLACA_DE_VEHICULO: "Vehiculo1" , FECHA: "awef", TIPODEALERTA: "male", PRIORIDAD: "1" , DESCRIPCION: "random 1"},
+    {id: 2, PLACA_DE_VEHICULO: "Vehiculo2" , FECHA: "wefw", TIPODEALERTA: "male", PRIORIDAD: "2" , DESCRIPCION: "random 2"},
+    {id: 3, PLACA_DE_VEHICULO: "Vehiculo3" , FECHA: "fwee", TIPODEALERTA: "fele", PRIORIDAD: "3" , DESCRIPCION: "random 3"},
+    {id: 4, PLACA_DE_VEHICULO: "Vehiculo4" , FECHA: "fwee", TIPODEALERTA: "mope", PRIORIDAD: "6" , DESCRIPCION: "random 3"},
+    {id: 5, PLACA_DE_VEHICULO: "Vehiculo5" , FECHA: "fwee", TIPODEALERTA: "fale", PRIORIDAD: "2" , DESCRIPCION: "random 3"},
+    {id: 6, PLACA_DE_VEHICULO: "Vehiculo6" , FECHA: "fwee", TIPODEALERTA: "male", PRIORIDAD: "8" , DESCRIPCION: "random 3"},
 ];
 var IOTReports = [
-    {Id: 1, VehicleId: 1, Date: "2021-11-24" , User: "awef", Position: "male", Speed: "1" , RPM: "111", Status: "Stopped"},
-    {Id: 2, VehicleId: 1, Date: "2021-10-24" , User: "wefw", Position: "male", Speed: "2" , RPM: "111", Status: "Moving"},
-    {Id: 3, VehicleId: 1, Date: "2021-4-24" , User: "fwee", Position: "fele", Speed: "3" , RPM: "111", Status: "Moving"},
-    {Id: 4, VehicleId: 1, Date: "2021-8-24" , User: "fwee", Position: "mope", Speed: "6" , RPM: "111", Status: "Turn on"},
-    {Id: 5, VehicleId: 2, Date: "2021-5-24" , User: "fwee", Position: "fale", Speed: "2" , RPM: "111", Status: "Stopped"},
-    {Id: 6, VehicleId: 2, Date: "2021-10-24" , User: "fwee", Position: "male", Speed: "8" , RPM: "111", Status: "Turn off"},
+    {id: 1, PLACA_DE_VEHICULO: "Vehiculo1", FECHA: "2021-11-24" , USER: "awef", POSICION: "{lat:,lon:}", SPEED: "1" , RPM: "111", ESTADO_DE_VEHICULO: "Stopped"  },
+    {id: 2, PLACA_DE_VEHICULO: "Vehiculo1", FECHA: "2021-10-24" , USER: "wefw", POSICION: "{lat:,lon:}", SPEED: "2" , RPM: "111", ESTADO_DE_VEHICULO: "Moving"   },
+    {id: 3, PLACA_DE_VEHICULO: "Vehiculo1", FECHA: "2021-4-24"  , USER: "fwee", POSICION: "{lat:,lon:}", SPEED: "3" , RPM: "111", ESTADO_DE_VEHICULO: "Moving"   },
+    {id: 4, PLACA_DE_VEHICULO: "Vehiculo1", FECHA: "2021-8-24"  , USER: "fwee", POSICION: "{lat:,lon:}", SPEED: "6" , RPM: "111", ESTADO_DE_VEHICULO: "Turn on"  },
+    {id: 5, PLACA_DE_VEHICULO: "Vehiculo2", FECHA: "2021-5-24"  , USER: "fwee", POSICION: "{lat:,lon:}", SPEED: "2" , RPM: "111", ESTADO_DE_VEHICULO: "Stopped"  },
+    {id: 6, PLACA_DE_VEHICULO: "Vehiculo2", FECHA: "2021-10-24" , USER: "fwee", POSICION: "{lat:,lon:}", SPEED: "8" , RPM: "111", ESTADO_DE_VEHICULO: "Turn off" },
+];
+var VEHICULO_USUARIO = [
+    {id: 1, PLACA_DE_VEHICULO: "Vehiculo1", CORREO_DE_USUARIO: "awef1@CORREO" },
+    {id: 2, PLACA_DE_VEHICULO: "Vehiculo2", CORREO_DE_USUARIO: "wefw2@CORREO" },
+    {id: 3, PLACA_DE_VEHICULO: "Vehiculo3", CORREO_DE_USUARIO: "fwee3@CORREO" },
+    {id: 4, PLACA_DE_VEHICULO: "Vehiculo4", CORREO_DE_USUARIO: "fwee4@CORREO" },
+    {id: 5, PLACA_DE_VEHICULO: "Vehiculo5", CORREO_DE_USUARIO: "fwee5@CORREO" },
+    {id: 6, PLACA_DE_VEHICULO: "Vehiculo6", CORREO_DE_USUARIO: "fwee6@CORREO" },
 ];
 
 var getDataTypes = async(req, res)=>{
@@ -103,290 +118,449 @@ var getSidebarItems = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     return res.status(200).json({error: false, login:login, res: sideItems});
 }
+var updateoptionsforselect = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
+    id = req.body.id
+    if(id == "Vehiculos"){
+        tipodevehiculo.gettiposdevehiculos((error, results, fields)=>{
+            if(!error){
+                id_tipodevehiculo = []
+                results.forEach((item, index)=>{
+                    id_tipodevehiculo.push(item["id"])
+                });
+                return res.status(200).json({error:false,login:login, optionForSelect: {id_tipodevehiculo: id_tipodevehiculo }});
+            }else{
+                console.log(error)
+                return res.status(200).json({error:true,login:login, optionForSelect: results });
+            }
+        });
+    }else if(id == ""){
+        
+    }else{
+        return res.status(200).json({error:false,login:login, optionForSelect: [] });
+    }
+}
 
-var getUsers = async(req, res)=>{
+var getUsuarios = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     const {PosicionFila ,NoFilas, json} = req.body;
     var msg = {
-        name: Users_id,
-        num: users.length, 
-        res: users
+        name: Usuarios_id,
+        num: 0, 
+        res: []
     };
-    return res.status(200).json({error:false, login:login, res:msg});
+    usuario.getNumberOfUsuarios((error, results, fields)=>{
+        if(!error){
+            var numRows = results[0]["NumRow"]; 
+            usuario.getUsuariosPosNoRows(0,10,(error, results, fields)=>{
+                if(!error){
+                    // quitar los verdaderos passwords
+                    results.forEach((item, index)=>{
+                        if(item.hasOwnProperty('PASSWORD')){
+                            item['PASSWORD'] = "******"
+                        }
+                    });
+                    msg["num"] = numRows
+                    msg["res"] = results
+
+                    return res.status(200).json({error:false, login:login, res:msg});
+                }else{
+                    return res.status(200).json({error:true, login:login, res:msg});
+                }
+            });
+        }else{
+            return res.status(200).json({error:true, login:login, res:msg});
+        }
+    });
 }
 
-var getVehicles = async(req, res)=>{
+
+var getVehiculos = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     const {PosicionFila ,NoFilas,json} = req.body;
+    
     var msg = {
-        name:Vehicles_id,
-        num:vehicles.length, 
-        res:vehicles,
+        name:Vehiculos_id,
+        num:Vehiculos.length, 
+        res:Vehiculos,
         report:IOTReports,
     };
-    return res.status(200).json({error:false, login:login, res:msg});
+    vehiculo.getNumberOfVehiculos((error, results, fields)=>{
+        if(!error){
+            var numRows = results[0]["NumRow"]; 
+            vehiculo.getVehiculosPosNoRows(0,10,(error, results, fields)=>{
+                if(!error){
+                
+                    msg["num"] = numRows
+                    msg["res"] = results
+    
+                    return res.status(200).json({error:false, login:login, res:msg});
+                }else{
+                    return res.status(200).json({error:true, login:login, res:msg});
+                }
+            });
+        }else{
+            return res.status(200).json({error:true, login:login, res:msg});
+        }
+    });
 }
-var getVehicleTypes = async(req, res)=>{
+
+var getTiposdevehiculos = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
-        name:VehicleTypes_id,
-        num:vehicleTypes.length, 
-        res:vehicleTypes
+        name:Tiposdevehiculos_id,
+        num:Tiposdevehiculos.length, 
+        res:Tiposdevehiculos
+    };
+    tipodevehiculo.getNumberOftipodevehiculo((error, results, fields)=>{
+        if(!error){
+            var numRows = results[0]["NumRow"]; 
+            tipodevehiculo.gettiposdevehiculosPosNoRows(0,10,(error, results, fields)=>{
+                if(!error){
+                
+                    msg["num"] = numRows
+                    msg["res"] = results
+    
+                    return res.status(200).json({error:false, login:login, res:msg});
+                }else{
+                    return res.status(200).json({error:true, login:login, res:msg});
+                }
+            });
+        }else{
+            return res.status(200).json({error:true, login:login, res:msg});
+        }
+    });
+}
+
+var getRutinasDeMantenimiento = async(req, res)=>{
+    login = {correo: req.session.correo,rol: req.session.rol}
+    var msg = {
+        name:RutinasDeMantenimiento_id,
+        num:RutinasDeMantenimiento.length, 
+        res:RutinasDeMantenimiento
     };
     return res.status(200).json({error:false, login:login, res:msg});
 }
-var getMaintainanceRoutine = async(req, res)=>{
+var getPlaneacionesDeMantenimiento = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
-        name:MaintainanceRoutine_id,
-        num:maintainanceRoutines.length, 
-        res:maintainanceRoutines
+        name:PlaneacionesDeMantenimiento_id,
+        num:PlaneacionesDeMantenimiento.length, 
+        res:PlaneacionesDeMantenimiento
     };
     return res.status(200).json({error:false, login:login, res:msg});
 }
-var getMaintainancePlanning = async(req, res)=>{
+var getAlertas = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
-        name:MaintainancePlanning_id,
-        num:maintainancePlannings.length, 
-        res:maintainancePlannings
+        name:Alertas_id,
+        num:Alertas.length, 
+        res:Alertas
     };
     return res.status(200).json({error:false, login:login, res:msg});
 }
-var getAlerts = async(req, res)=>{
+var getVEHICULO_USUARIO = async(req, res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     var msg = {
-        name:Alerts_id,
-        num:alerts.length, 
-        res:alerts
+        name:VEHICULO_USUARIO_id,
+        num:VEHICULO_USUARIO.length, 
+        res:VEHICULO_USUARIO
     };
     return res.status(200).json({error:false, login:login, res:msg});
 }
 // update functions
-var writeUsers = (req, res) => {
+var writeUsuarios = async (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
-    var Id;
+    var id;
     var order;
-    if(data["Id"] != "") {
-        Id = data["Id"];
-        users.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    console.log(data)
+    if(data["id"] != "") {
+        // Actualizar USUARIO
+        id = data["id"];
+        pass = (data["PASSWORD"] == "******")? null :  await bcrypt.hash(data["PASSWORD"], 12) ;
+        usuario.ActualizarUsuario(data["id"], data["NOMBRE"], data["APELLIDO"], data["CORREO"], pass, data["ROL"], data["GENERO"], data["CEDULA"], data["TARJETA"], (error, results, fields)=>{
+            if(!error){
+                return res.status(200).json({success: true, login:login, result: []});
+            }else{
+                return res.status(200).json({success: false, login:login, result: []}); 
+            }
         });
-        users.splice(order, 1, data);
     }else {
-        Id = users[users.length - 1]["Id"] + 1;
-        data["Id"] = Id;
-        users.push(data);
+        // Crear USUARIO
+        pass = (data["PASSWORD"] == "******")? null :  await bcrypt.hash(data["PASSWORD"], 12) ;
+        usuario.CrearUsuario(data["NOMBRE"], data["APELLIDO"], data["CORREO"], pass, data["ROL"], data["GENERO"], data["CEDULA"], data["TARJETA"],(error, results, fields)=>{
+            if(!error){
+                return res.status(200).json({success: true, login:login, result: []});
+            }else{
+                console.log(error)
+                return res.status(200).json({success: false, login:login, result: []}); 
+            }
+        });
     }
-    return res.status(200).json({success: true, login:login, result: users});
 }
-var writeVehicles = (req, res) => {
+//     'ALIAS', 'PLACA', 'id_tipodevehiculo', 'CILINDRADA CC','COLOR','SERVICIO','CLASE DE VEHICULO', 'TIPO DE CARROCERIA','COMBUSTIBLE','CAPACIDAD_KG_PSJ','NUMERO DE MOTOR','VIN','NUMERO DE SERIE','NUMERO DE CHASIS','PROPIETARIO','NIT','POTENCIA','DECLARACION DE IMPORTACION','FECHA DE IMPORTACION','PUERTAS','FECHA MATRICULA','FECHA EXP LIC TTO'
+
+var writeVehiculos = async (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
-    var Id;
+    var id;
     var order;
-    if(data["Id"] != "") {
-        Id = data["Id"];
-        vehicles.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    console.log(data)
+    if(data["id"] != "") {
+        // Actualizar Vehiculo
+        id = data["id"]; 
+        vehiculo.ActualizarVehiculo(id,data['ALIAS'],data['PLACA'],data['id_tipodevehiculo'],data['CILINDRADA CC'],data['COLOR'],data['SERVICIO'],data['CLASE DE VEHICULO'],data['TIPO DE CARROCERIA'],data['COMBUSTIBLE'],data['CAPACIDAD_KG_PSJ'],data['NUMERO DE MOTOR'],data['VIN'],data['NUMERO DE SERIE'],data['NUMERO DE CHASIS'],data['PROPIETARIO'],data['NIT'],data['POTENCIA'],data['DECLARACION DE IMPORTACION'],data['FECHA DE IMPORTACION'],data['PUERTAS'],data['FECHA MATRICULA'],data['FECHA EXP LIC TTO'], (error, results, fields)=>{
+            if(!error){
+                return res.status(200).json({success: true, login:login, result: []});
+            }else{
+                console.log(error)
+                return res.status(200).json({success: false, login:login, result: []}); 
+            }
         });
-        vehicles.splice(order, 1, data);
     }else {
-        Id = vehicles[vehicles.length - 1]["Id"] + 1;
-        data["Id"] = Id;
-        vehicles.push(data);
+        vehiculo.CrearVehiculo( data['ALIAS'],data['PLACA'],data['id_tipodevehiculo'],data['CILINDRADA CC'],data['COLOR'],data['SERVICIO'],data['CLASE DE VEHICULO'],data['TIPO DE CARROCERIA'],data['COMBUSTIBLE'],data['CAPACIDAD_KG_PSJ'],data['NUMERO DE MOTOR'],data['VIN'],data['NUMERO DE SERIE'],data['NUMERO DE CHASIS'],data['PROPIETARIO'],data['NIT'],data['POTENCIA'],data['DECLARACION DE IMPORTACION'],data['FECHA DE IMPORTACION'],data['PUERTAS'],data['FECHA MATRICULA'],data['FECHA EXP LIC TTO'] ,(error, results, fields)=>{
+            if(!error){
+                return res.status(200).json({success: true, login:login, result: []});
+            }else{
+                console.log(error)
+                return res.status(200).json({success: false, login:login, result: []}); 
+            }
+        });
     }
-    return res.status(200).json({success: true, login:login, result: vehicles});
 }
-var writeVehicleTypes = (req, res) => {
+
+var writeTiposdevehiculos = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
-    var Id;
+    var id;
     var order;
-    if(data["Id"] != "") {
-        Id = data["Id"];
-        vehicleTypes.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"] != "") {
+        id = data["id"];
+        Tiposdevehiculos.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
         });
-        vehicleTypes.splice(order, 1, data);
+        Tiposdevehiculos.splice(order, 1, data);
     }else {
-        Id = vehicleTypes[vehicleTypes.length - 1]["Id"] + 1;
-        data["Id"] = Id;
-        vehicleTypes.push(data);
+        id = Tiposdevehiculos[Tiposdevehiculos.length - 1]["id"] + 1;
+        data["id"] = id;
+        Tiposdevehiculos.push(data);
     }
-    return res.status(200).json({success: true, login:login, result: vehicleTypes});
+    return res.status(200).json({success: true, login:login, result: Tiposdevehiculos});
 }
-var writeMaintainanceRoutine = (req, res) => {
+var writeRutinasDeMantenimiento = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
-    var Id;
+    var id;
     var order;
-    if(data["Id"] != "") {
-        Id = data["Id"];
-        maintainanceRoutines.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"] != "") {
+        id = data["id"];
+        RutinasDeMantenimiento.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
         });
-        maintainanceRoutines.splice(order, 1, data);
+        RutinasDeMantenimiento.splice(order, 1, data);
     }else {
-        Id = maintainanceRoutines[maintainanceRoutines.length - 1]["Id"] + 1;
-        data["Id"] = Id;
-        maintainanceRoutines.push(data);
+        id = RutinasDeMantenimiento[RutinasDeMantenimiento.length - 1]["id"] + 1;
+        data["id"] = id;
+        RutinasDeMantenimiento.push(data);
     }
-    return res.status(200).json({success: true, login:login, result: maintainanceRoutines});
+    return res.status(200).json({success: true, login:login, result: RutinasDeMantenimiento});
 }
-var writeMaintainancePlanning = (req, res) => {
+var writePlaneacionesDeMantenimiento = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
-    var Id;
+    var id;
     var order;
-    if(data["Id"] != "") {
-        Id = data["Id"];
-        maintainancePlannings.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"] != "") {
+        id = data["id"];
+        PlaneacionesDeMantenimiento.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
         });
-        maintainancePlannings.splice(order, 1, data);
+        PlaneacionesDeMantenimiento.splice(order, 1, data);
     }else {
-        Id = maintainancePlannings[maintainancePlannings.length - 1]["Id"] + 1;
-        data["Id"] = Id;
-        maintainancePlannings.push(data);
+        id = PlaneacionesDeMantenimiento[PlaneacionesDeMantenimiento.length - 1]["id"] + 1;
+        data["id"] = id;
+        PlaneacionesDeMantenimiento.push(data);
     }
-    return res.status(200).json({success: true, login:login, result: maintainancePlannings});
+    return res.status(200).json({success: true, login:login, result: PlaneacionesDeMantenimiento});
 }
-var writeAlerts = (req, res) => {
+var writeAlertas = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
-    var Id;
+    var id;
     var order;
-    if(data["Id"] != "") {
-        Id = data["Id"];
-        alerts.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"] != "") {
+        id = data["id"];
+        Alertas.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
         });
-        alerts.splice(order, 1, data);
+        Alertas.splice(order, 1, data);
     }else {
-        Id = alerts[alerts.length - 1]["Id"] + 1;
-        data["Id"] = Id;
-        alerts.push(data);
+        id = Alertas[Alertas.length - 1]["id"] + 1;
+        data["id"] = id;
+        Alertas.push(data);
     }
-    return res.status(200).json({success: true, login:login, result: alerts});
+    return res.status(200).json({success: true, login:login, result: Alertas});
+}
+var writeVEHICULO_USUARIO = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
+    var data = req.body;
+    var id;
+    var order;
+    if(data["id"] != "") {
+        id = data["id"];
+        VEHICULO_USUARIO.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
+        });
+        VEHICULO_USUARIO.splice(order, 1, data);
+    }else {
+        id = VEHICULO_USUARIO[VEHICULO_USUARIO.length - 1]["id"] + 1;
+        data["id"] = id;
+        VEHICULO_USUARIO.push(data);
+    }
+    return res.status(200).json({success: true, login:login, result: VEHICULO_USUARIO});
 }
 // delete functions
-var deleteUsers = (req, res) => {
+var deleteUsuarios = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
-    if(data["Id"]) {
-        Id = data["Id"];
-        users.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"]) {
+        id = data["id"];
+        usuario.EliminarUsuario(id,(error, results, fields)=>{
+            if(!error){
+                return res.status(200).json({success: true, login:login, result: []});
+            }else{
+                return res.status(200).json({success: false, login:login, result: []});
+            }
         });
-        users.splice(order, 1);
-        return res.status(200).json({success: true, login:login, result: users});
     }else {
-        return res.status(200).json({success: false, login:login, result: users});
-    }
-}
-var deleteVehicles = (req, res) => {
-    login = {correo: req.session.correo,rol: req.session.rol}
-    var data = req.body;
-    var order;
-    if(data["Id"]) {
-        Id = data["Id"];
-        vehicles.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
-        });
-        vehicles.splice(order, 1);
-        return res.status(200).json({success: true, login:login, result: vehicles});
-    }else {
-        return res.status(200).json({success: false, login:login, result: vehicles});
-    }
-}
-var deleteVehicleTypes = (req, res) => {
-    login = {correo: req.session.correo,rol: req.session.rol}
-    var data = req.body;
-    var order;
-    if(data["Id"]) {
-        Id = data["Id"];
-        vehicleTypes.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
-        });
-        vehicleTypes.splice(order, 1);
-        return res.status(200).json({success: true, login:login, result: vehicleTypes});
-    }else {
-        return res.status(200).json({success: false, login:login, result: vehicleTypes});
-    }
-}
-var deleteMaintainanceRoutine = (req, res) => {
-    login = {correo: req.session.correo,rol: req.session.rol}
-    var data = req.body;
-    var order;
-    if(data["Id"]) {
-        Id = data["Id"];
-        maintainanceRoutines.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
-        });
-        maintainanceRoutines.splice(order, 1);
-        return res.status(200).json({success: true, login:login, result: maintainanceRoutines});
-    }else {
-        return res.status(200).json({success: false, login:login, result: maintainanceRoutines});
+        return res.status(200).json({success: false, login:login, result: Usuarios});
     }
 }
 
-var deleteMaintainancePlanning = (req, res) => {
+var deleteVehiculos = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
-    if(data["Id"]) {
-        Id = data["Id"];
-        maintainancePlannings.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"]) {
+        id = data["id"];
+        vehiculo.EliminarVehiculo(id,(error, results, fields)=>{
+            if(!error){
+                return res.status(200).json({success: true, login:login, result: []});
+            }else{
+                return res.status(200).json({success: false, login:login, result: []});
+            }
         });
-        maintainancePlannings.splice(order, 1);
-        return res.status(200).json({success: true, login:login, result: maintainancePlannings});
     }else {
-        return res.status(200).json({success: false, login:login, result: maintainancePlannings});
+        return res.status(200).json({success: false, login:login, result: Vehiculos});
     }
 }
 
-var deleteAlerts = (req, res) => {
+var deleteTiposdevehiculos = (req, res) => {
     login = {correo: req.session.correo,rol: req.session.rol}
     var data = req.body;
     var order;
-    if(data["Id"]) {
-        Id = data["Id"];
-        alerts.forEach((item, index) => {
-            if(item["Id"] == data["Id"]) order = index;
+    if(data["id"]) {
+        id = data["id"];
+        Tiposdevehiculos.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
         });
-        alerts.splice(order, 1);
-        return res.status(200).json({success: true, login:login, result: alerts});
+        Tiposdevehiculos.splice(order, 1);
+        return res.status(200).json({success: true, login:login, result: Tiposdevehiculos});
     }else {
-        return res.status(200).json({success: false, login:login, result: alerts});
+        return res.status(200).json({success: false, login:login, result: Tiposdevehiculos});
+    }
+}
+var deleteRutinasDeMantenimiento = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
+    var data = req.body;
+    var order;
+    if(data["id"]) {
+        id = data["id"];
+        RutinasDeMantenimiento.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
+        });
+        RutinasDeMantenimiento.splice(order, 1);
+        return res.status(200).json({success: true, login:login, result: RutinasDeMantenimiento});
+    }else {
+        return res.status(200).json({success: false, login:login, result: RutinasDeMantenimiento});
+    }
+}
+
+var deletePlaneacionesDeMantenimiento = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
+    var data = req.body;
+    var order;
+    if(data["id"]) {
+        id = data["id"];
+        PlaneacionesDeMantenimiento.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
+        });
+        PlaneacionesDeMantenimiento.splice(order, 1);
+        return res.status(200).json({success: true, login:login, result: PlaneacionesDeMantenimiento});
+    }else {
+        return res.status(200).json({success: false, login:login, result: PlaneacionesDeMantenimiento});
+    }
+}
+
+var deleteAlertas = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
+    var data = req.body;
+    var order;
+    if(data["id"]) {
+        id = data["id"];
+        Alertas.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
+        });
+        Alertas.splice(order, 1);
+        return res.status(200).json({success: true, login:login, result: Alertas});
+    }else {
+        return res.status(200).json({success: false, login:login, result: Alertas});
+    }
+}
+var deleteVEHICULO_USUARIO = (req, res) => {
+    login = {correo: req.session.correo,rol: req.session.rol}
+    var data = req.body;
+    var order;
+    if(data["id"]) {
+        id = data["id"];
+        VEHICULO_USUARIO.forEach((item, index) => {
+            if(item["id"] == data["id"]) order = index;
+        });
+        VEHICULO_USUARIO.splice(order, 1);
+        return res.status(200).json({success: true, login:login, result: VEHICULO_USUARIO});
+    }else {
+        return res.status(200).json({success: false, login:login, result: VEHICULO_USUARIO});
     }
 }
 
 module.exports  = {
     getDataTypes,
     getSidebarItems,
+    updateoptionsforselect,
 
-    getUsers,
-    getVehicles,
-    getVehicleTypes,
-    getMaintainanceRoutine,
-    getMaintainancePlanning,
-    getAlerts,
+    getUsuarios,
+    getVehiculos,
+    getTiposdevehiculos,
+    getRutinasDeMantenimiento,
+    getPlaneacionesDeMantenimiento,
+    getAlertas,
+    getVEHICULO_USUARIO,
 
-    writeUsers,
-    writeVehicles,
-    writeVehicleTypes,
-    writeMaintainanceRoutine,
-    writeMaintainancePlanning,
-    writeAlerts,
+    writeUsuarios,
+    writeVehiculos,
+    writeTiposdevehiculos,
+    writeRutinasDeMantenimiento,
+    writePlaneacionesDeMantenimiento,
+    writeAlertas,
+    writeVEHICULO_USUARIO,
 
-    deleteUsers,
-    deleteVehicles,
-    deleteVehicleTypes,
-    deleteMaintainanceRoutine,
-    deleteMaintainancePlanning,
-    deleteAlerts,
+    deleteUsuarios,
+    deleteVehiculos,
+    deleteTiposdevehiculos,
+    deleteRutinasDeMantenimiento,
+    deletePlaneacionesDeMantenimiento,
+    deleteAlertas,
+    deleteVEHICULO_USUARIO
 }

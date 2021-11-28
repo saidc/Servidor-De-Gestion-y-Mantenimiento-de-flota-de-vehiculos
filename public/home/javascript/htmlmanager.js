@@ -3,26 +3,41 @@ var dataLabels = []; // from index.js
 var dataVariables = [];
 var IOTReports = [];
 var filteredIOTReports = [];;
-var fieldForSelection = ["Gender", "VehicleTypeId", "VehiculoName", "MainteinRoutin", "State", "MedicionTime", "MedicionDist", "Status"];
+
+var fieldForSelection = [
+    "GENERO", "PLACA_DE_VEHICULO", "id_tipodevehiculo", "id_rutinademantenimiento", 
+    "ESTADO_DE_VEHICULO", "ESTADO_DE_RUTINA", "ESTADO_DE_PLAN", "MEDICION_DE_TIEMPO",
+    "MEDICION_DE_DISTANCIA", "COMBUSTIBLE", "TIPO_DE_RUTINA","CORREO_DE_USUARIO","ROL"];
+
 var optionForSelect = {
-    Gender: ["male", "female"],
-    VehicleTypeId: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
-    VehiculoName: ["ELM327", "UTP350", "ELN321"],
-    MainteinRoutin: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
-    State: ["SUCCESS", "WAIT", "CANCEL"],
-    MedicionTime: ["HOURS", "DAYS", "MONTHS"],
-    MedicionDist: ["KILOS", "KILOMETERS"],
-    Status: ["All", "Moving", "Stopped", "Turn on", "Turn off"],
+    // Datos que hay que obtener de base de datos
+    PLACA_DE_VEHICULO: ["ELM327", "UTP350", "ELN321"],
+    id_tipodevehiculo: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
+    id_rutinademantenimiento: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
+    CORREO_DE_USUARIO: ["awef1@CORREO","wefw2@CORREO","fwee3@CORREO","fwee4@CORREO","fwee5@CORREO","fwee6@CORREO"],
+    
+    // datos estatico o fijos
+    GENERO: ["MASCULINO", "FEMENINO"],
+    ESTADO_DE_VEHICULO: [ "MOVIMIENTO", "DETENIDO", "ENCENDIDO", "APAGADO"],
+    ESTADO_DE_RUTINA: ["ACTIVA", "INACTIVA"],
+    ESTADO_DE_PLAN: ["EXITOSO", "ESPERA", "CANCELADO"],
+    MEDICION_DE_TIEMPO: ["HORA", "DIA", "MES"],
+    MEDICION_DE_DISTANCIA: ["KILOMETROS", "MILLAS"],
+    COMBUSTIBLE: ["DIESEL", "GASOLINA", "GAS", "ELECTRICO"],
+    TIPO_DE_RUTINA: ["PREVENTIVO", "CORRECTIVO"],
+    ROL:["ADMINISTRADOR","CONDUCTOR","TRABAJADOR"]
 }
-var fieldForText = ["Description", "OBSERVATION", "Details"];
-var fieldForDate = ["InitialDate", "FinalDate", "InitialDateTime", "FinalDateTime", "importacionFecha", "FechaMatricula", "FechaExp"];
-var fieldForHalfSize = ["Tiempo", "Distancia", "Titulo"]; // locate half size with the item next to it.
+
+var fieldForText = ["DESCRIPCION", "OBSERVACION"];
+var fieldForDate = ["FECHA","FECHAINICIAL", "FECHAFINAL","FECHA DE IMPORTACION", "FECHA MATRICULA", "FECHA EXP LIC TTO","InitialDateTime","FinalDateTime"];
+var fieldForHalfSize = ["TIEMPO", "DISTANCIA"]; // locate half size with the item next to it.
 
 // creacion de un elemento li de html
 var createli = (content,id, haserror)=>{
     var li = document.createElement('li');
     var div = document.createElement('div');
     div.classList.add("sidebarnavelement");
+    console.log(id)
     if(!haserror){
         div.setAttribute("onclick", "sidebarnavelement('" + id + "')");
     }
@@ -83,8 +98,6 @@ var createTable = (list, id)=>{
                 td.appendChild(viewbtn);
                 tr.appendChild(td);
             }
-            
-
             tbody.appendChild(tr);
         });
         
@@ -245,7 +258,7 @@ var createbutton = (id, content)=>{
 var createinput = (id, content)=>{
     var input = document.createElement('input');
     
-    if(id == "Password" || content == "password") input.type = "password";
+    if(id == "PASSWORD" || content == "PASSWORD") input.type = "password";
     else input.type = "text";
     input.value = content;
     input.setAttribute("id", id);

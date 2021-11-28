@@ -1,17 +1,23 @@
-var host = "https://"+window.location.hostname ;//"http://127.0.0.1:3000";//"https://fast-chamber-47171.herokuapp.com:/"
-console.log(window.location.hostname)
+var host = (window.location.hostname)
+if(host == "127.0.0.1"){
+    host = "http://"+window.location.hostname +":3000";
+}else{
+    host = "https://"+window.location.hostname ; 
+}
+console.log(host)
 console.log(window.location.href)
 var payload = {
     pageNo: 0, count: 10
 };
 var filterViewFlag = 0;
-var filterOption = {InitialDateTime: "", FinalDateTime: "", Status: "All"};
+var filterOption = {FECHAINICIAL: "", FECHAFINAL: "", Status: "All"};
 
 //inicializa evento del check burger
 burgercheckbox();
 
 //post request 
 var postJsonData = async (jsonObject, id)=>{
+    console.log("buscar:" , id)
     const response = await fetch(host+"/api/" + id, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
@@ -54,12 +60,11 @@ var removeaddreportbox = ()=>{
 var sidebarnavelement = async (id)=>{ 
     removeaddcontentbox();
     removeaddreportbox();
-    updateLoader("contentboxloader");
+    updateLoader("contentboxloader"); 
     
     var addcontentbox = document.getElementById("addcontentbox");
     try {
         var res = await postJsonData(payload, id);
-        console.log(res)
         if(!(res.error )){
             var h2 = res.res.name;
             var numusers = res.res.num;
@@ -78,7 +83,7 @@ var sidebarnavelement = async (id)=>{
                         var temp = {id: id, item: "", option: "create"};
                         var str = JSON.stringify(temp);
                         createnew.setAttribute("onclick", "create_update_delete('" + str + "')");
-                    if(id != "Alerts") headeractions.appendChild(createnew);
+                    if(id != "Alertas") headeractions.appendChild(createnew);
                 contenboxheaderactions.appendChild(headerinfo);
                 contenboxheaderactions.appendChild(headeractions);
             contentboxactionheader.appendChild(contentboxtreepath);
@@ -89,12 +94,13 @@ var sidebarnavelement = async (id)=>{
             tablewrapper.appendChild(createTable(res.res.res, id))
             addcontentbox.appendChild(tablewrapper);
 
-            if(res.res.name == "Vehicles") {
+            if(res.res.name == "Vehiculos") {
                 IOTReports = res.res.report;
                 filteredIOTReports = res.res.report;
-                console.log("IOTReports", IOTReports);
             }
+
             updateLoader("contentboxloader");
+
         }else{
             console.log(res.error)
             addcontentbox.appendChild(createTable([]));
@@ -107,7 +113,7 @@ var sidebarnavelement = async (id)=>{
     }
 }
 
-var detail = async (str)=>{ 
+var detail = async (str)=>{
     var data = JSON.parse(str);
     removeaddcontentbox();
     updateLoader("contentboxloader");
@@ -131,8 +137,8 @@ var detail = async (str)=>{
                 temp = {id: data.id, item: data.item, option: "delete"};
                 str = JSON.stringify(temp);
                 remove.setAttribute("onclick", "create_update_delete('" + str + "')");
-            if(data.id != "Alerts") headeractions.appendChild(update);
-            if(data.id != "Alerts") headeractions.appendChild(remove);
+            if(data.id != "Alertas") headeractions.appendChild(update);
+            if(data.id != "Alertas") headeractions.appendChild(remove);
         contenboxheaderactions.appendChild(headerinfo);
         contenboxheaderactions.appendChild(headeractions);
     contentboxactionheader.appendChild(contentboxtreepath);
@@ -146,7 +152,7 @@ var detail = async (str)=>{
     bottomactions.appendChild(cancel);
     addcontentbox.appendChild(bottomactions);
 
-    if(data.id == "Vehicles"){
+    if(data.id == "Vehiculos"){
         removeaddreportbox();
         var addreportbox = document.getElementById("addreportbox");
         var h2filter = "IoT Reports";
@@ -186,9 +192,18 @@ var detail = async (str)=>{
             addreportbox.appendChild(bottomactions);
         }
         
-
     }
     updateLoader("contentboxloader");
+    // update options for select 
+    var payload = { id : data.id}
+    var res = await postJsonData(payload, "updateoptionsforselect");
+    if(res.hasOwnProperty('optionForSelect') ){
+        keys = Object.keys(res["optionForSelect"])
+        keys.forEach((key, index)=>{
+            optionForSelect[key] = res["optionForSelect"][key]
+        });
+        console.log("optionForSelect ",optionForSelect) 
+    }
 }
 
 var create_update_delete = async (str)=>{
@@ -231,8 +246,8 @@ var create_update_delete = async (str)=>{
                     update.classList.remove("hover");
                     remove.classList.add("hover");
                 }
-            if(data.id != "Alerts") headeractions.appendChild(update);
-            if(data.id != "Alerts") headeractions.appendChild(remove);
+            if(data.id != "Alertas") headeractions.appendChild(update);
+            if(data.id != "Alertas") headeractions.appendChild(remove);
         contenboxheaderactions.appendChild(headerinfo);
         contenboxheaderactions.appendChild(headeractions);
     contentboxactionheader.appendChild(contentboxtreepath);
@@ -254,9 +269,9 @@ var create_update_delete = async (str)=>{
         if(data.option == "create"){
             save.setAttribute("onclick", "save('" + data.id + "' , '" + "" + "')");
         }else if(data.option == "update"){
-            save.setAttribute("onclick", "save('" + data.id + "' , '" + data.item["Id"] + "')");
+            save.setAttribute("onclick", "save('" + data.id + "' , '" + data.item["id"] + "')");
         }else{
-            save.setAttribute("onclick", "remove('" + data.id + "' , '" + data.item["Id"] + "')");
+            save.setAttribute("onclick", "remove('" + data.id + "' , '" + data.item["id"] + "')");
         }
         
         var cancel = createbutton("savebtn", button4);
@@ -286,11 +301,11 @@ function filterConfirm(str) {
 
 function filterData(filterOption) {
     
-    // InitialDateTime: "", FinalDateTime: "", Status: ""
+    // FECHAINICIAL: "", FECHAFINAL: "", Status: ""
     var temp = [];
     var start, end, date;
-    start = new Date(filterOption["InitialDateTime"]).getTime();
-    end = new Date(filterOption["FinalDateTime"]).getTime();
+    start = new Date(filterOption["FECHAINICIAL"]).getTime();
+    end = new Date(filterOption["FECHAFINAL"]).getTime();
 
     IOTReports.forEach((item, index) => {
         date = new Date(item["Date"]).getTime();
@@ -299,7 +314,7 @@ function filterData(filterOption) {
 
         if((start <= date || isNaN(start)) 
         && (end >= date || isNaN(end)) 
-        && (filterOption["Status"] == item["Status"] || filterOption["Status"] == "All")){
+        && (filterOption["ESTADO_DE_VEHICULO"] == item["ESTADO_DE_VEHICULO"] || filterOption["ESTADO_DE_VEHICULO"] == "All")){
             temp.push(item);
         } 
     });
@@ -317,8 +332,9 @@ var save = async (id, data_id)=> {
     savefields.forEach((field, index) => {
         var content = document.getElementsByClassName(field + "-input")[0];
         savedata[field] = content.value;
+        
     });
-    savedata["Id"] = data_id;
+    savedata["id"] = data_id;
     console.log("savedata", savedata);
     
     var res = await postJsonDataForWrite(savedata, id);
@@ -328,11 +344,11 @@ var save = async (id, data_id)=> {
     } else{
         alert("there are some errors!");
     } 
-
 }
+
 var remove = async (id, data_id)=> {
     console.log("deletedata", id + ":" + data_id)
-    var deletedata = {Id: data_id}
+    var deletedata = {id: data_id}
     var res = await postJsonDataForDelete(deletedata, id);
     console.log("res", res);
     if(res.success == true) {
@@ -384,7 +400,7 @@ var initView = ()=>{
     }).then(res => {
         dataLabels = res.dataLabels;
         dataVariables = res.dataVariables;
-        sidebarnavelement( "Users");
+        sidebarnavelement( "Usuarios");
         updateLoader("contentboxloader");
     }).catch(error => {
         console.log(error)
