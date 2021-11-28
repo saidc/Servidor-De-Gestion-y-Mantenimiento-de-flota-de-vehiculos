@@ -12,6 +12,9 @@ router.get( "/homesidebar", isAuth, controller.getSidebarItems );
 router.get( "/dataTypes", isAuth, controller.getDataTypes);
 
 router.post( "/updateoptionsforselect", isAuth, controller.updateoptionsforselect);
+router.post( "/gettipodevehiculosbyId", isAuth, controller.gettipodevehiculosbyId);
+router.post( "/getVEHICULO_BY_PLACA_DE_VEHICULO", isAuth, controller.getVEHICULO_BY_PLACA_DE_VEHICULO);
+
 // get functions
 router.post( "/Usuarios"    , isAuth, controller.getUsuarios );
 router.post( "/Vehiculos"   , isAuth, controller.getVehiculos );

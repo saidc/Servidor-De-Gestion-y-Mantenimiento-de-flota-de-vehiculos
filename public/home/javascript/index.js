@@ -197,6 +197,7 @@ var detail = async (str)=>{
     // update options for select 
     var payload = { id : data.id}
     var res = await postJsonData(payload, "updateoptionsforselect");
+    console.log(res)
     if(res.hasOwnProperty('optionForSelect') ){
         keys = Object.keys(res["optionForSelect"])
         keys.forEach((key, index)=>{
@@ -280,6 +281,28 @@ var create_update_delete = async (str)=>{
     bottomactions.appendChild(cancel);
     addcontentbox.appendChild(bottomactions);
     updateLoader("contentboxloader");
+}
+
+var redirectView = async(str)=>{
+    var data = JSON.parse(str);
+    key = data.key
+    id = data.id
+    if(key == "id_tipodevehiculo"){
+        var payload = { id : data.id}
+        var res = await postJsonData(payload, "gettipodevehiculosbyId");
+        if(res.result.length > 0 ){
+            var str = JSON.stringify({item: res.result[0], id: "Tiposdevehiculos"});
+            detail(str) 
+        }
+    }else if(key == "PLACA_DE_VEHICULO"){
+        var payload = { placa : data.id}
+        var res = await postJsonData(payload, "getVEHICULO_BY_PLACA_DE_VEHICULO");
+        if(res.result.length > 0 ){
+            var str = JSON.stringify({item: res.result[0], id: "Vehiculos"});
+            detail(str) 
+        }
+
+    } 
 }
 
 function filterView(str) {

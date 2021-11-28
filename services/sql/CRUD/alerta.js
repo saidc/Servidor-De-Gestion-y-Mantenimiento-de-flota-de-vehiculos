@@ -31,7 +31,7 @@ module.exports.getAlertabetweenDatetime = async (PLACA_DE_VEHICULO, Fecha_inicia
 
 //  GetColums names
 module.exports.GetColumnsNames = async (callback)=>{
-    await query("SHOW COLUMNS FROM 123databasename321.reporte ;",[],callback);
+    await query("SHOW COLUMNS FROM 123databasename321.alerta ;",[],callback);
 }
 
 var removechar=(str,pos)=>{ return ( pos >= str.length || pos < 0 || str.length == 0)? (str): (pos == 0)? (str.slice(1)): (pos == str.length -1 )? (str.slice(0,pos)) :(str.slice(0,pos)+str.slice(pos+1)) }

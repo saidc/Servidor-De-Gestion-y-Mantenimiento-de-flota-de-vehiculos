@@ -12,7 +12,7 @@ var fieldForSelection = [
 var optionForSelect = {
     // Datos que hay que obtener de base de datos
     PLACA_DE_VEHICULO: ["ELM327", "UTP350", "ELN321"],
-    id_tipodevehiculo: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
+    id_tipodevehiculo: [],
     id_rutinademantenimiento: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
     CORREO_DE_USUARIO: ["awef1@CORREO","wefw2@CORREO","fwee3@CORREO","fwee4@CORREO","fwee5@CORREO","fwee6@CORREO"],
     
@@ -81,6 +81,12 @@ var createTable = (list, id)=>{
                 else{
                     var td = document.createElement('td');
                     td.setAttribute("data-heading", datakeys[i]);
+                    if(datakeys[i].includes("id_") || datakeys[i] == "PLACA_DE_VEHICULO"){
+                        var str = JSON.stringify({key: datakeys[i], id: item[datakeys[i]]});
+                        td.setAttribute("onclick", "redirectView('" + str + "')");
+                        td.setAttribute("onmouseover", "this.style.color='red';this.style.cursor='pointer';");
+                        td.setAttribute("onmouseout" , "this.style.color='';");
+                    }
                     td.innerHTML= item[datakeys[i]];
                     tr.appendChild(td);
                 }

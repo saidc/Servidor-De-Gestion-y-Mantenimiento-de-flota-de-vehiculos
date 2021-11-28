@@ -11,17 +11,21 @@ module.exports.CrearVehiculo = async(ALIAS, PLACA, id_tipodevehiculo, CILINDRADA
 }
 // READ VEHICULO
 module.exports.getVehiculobyId = async(ID , callback)=>{
-    await query("SELECT * FROM 123databasename321.vehiculo WHERE (`id`= ? );",[ID],callback);
+    await query("SELECT * FROM 123databasename321.`vehiculo` WHERE (`id`= ? );",[ID],callback);
+}
+
+module.exports.getVehiculo = async(ID , callback)=>{
+    await query("SELECT PLACA FROM 123databasename321.`vehiculo`;",[ID],callback);
 }
 module.exports.getVehiculobyPlaca = async(Placa , callback)=>{
-    await query("SELECT * FROM 123databasename321.vehiculo WHERE (PLACA = UPPER(?));",[Placa],callback);
+    await query("SELECT * FROM 123databasename321.`vehiculo` WHERE (PLACA = UPPER(?));",[Placa],callback);
 }
 module.exports.getVehiculosPosNoRows = async ( PosicionFila ,NoFilas,callback)=>{
-    await query("SELECT * FROM 123databasename321.vehiculo LIMIT ?,?;",[PosicionFila,NoFilas],callback);
+    await query("SELECT * FROM 123databasename321.`vehiculo`LIMIT ?,?;",[PosicionFila,NoFilas],callback);
 }
 // obtienen el numero de vehiculos existentes
 module.exports.getNumberOfVehiculos = async ( callback)=>{
-    await query("SELECT COUNT(*) as NumRow FROM 123databasename321.vehiculo ;",[],callback);
+    await query("SELECT COUNT(*) as NumRow FROM 123databasename321.`vehiculo` ;",[],callback);
 }
 // UPDATE VEHICULO
 module.exports.ActualizarVehiculo = async(ID,ALIAS, PLACA, id_tipodevehiculo, CILINDRADA_CC,COLOR,SERVICIO,CLASE_DE_VEHICULO, TIPO_DE_CARROCERIA,COMBUSTIBLE,CAPACIDAD_KG_PSJ,NUMERO_DE_MOTOR,VIN,NUMERO_DE_SERIE,NUMERO_DE_CHASIS,PROPIETARIO,NIT,POTENCIA,DECLARACION_DE_IMPORTACION,FECHA_DE_IMPORTACION,PUERTAS,FECHA_MATRICULA,FECHA_EXP_LIC_TTO, callback)=>{
@@ -62,16 +66,16 @@ module.exports.EliminarVehiculo = async(ID,callback)=>{
 
 // get Placa
 module.exports.getID_Vehiculo = async(PLACA,callback)=>{
-    await query("SELECT id FROM 123databasename321.vehiculo WHERE (PLACA = ? );",[PLACA],callback);
+    await query("SELECT id FROM 123databasename321.`vehiculo` WHERE (PLACA = ? );",[PLACA],callback);
 }
 //  GetColums names
 module.exports.GetColumnsNames = async (callback)=>{
-    await query("SHOW COLUMNS FROM 123databasename321.vehiculo ;",[],callback);
+    await query("SHOW COLUMNS FROM 123databasename321.`vehiculo` ;",[],callback);
 }
 
 //  Validar Actualizar Vehiculo
 module.exports.GetColumnsNames = async (callback)=>{
-    await query("SHOW COLUMNS FROM 123databasename321.vehiculo ;",[],callback);
+    await query("SHOW COLUMNS FROM 123databasename321.`vehiculo` ;",[],callback);
 }
 
 var removechar=(str,pos)=>{ return ( pos >= str.length || pos < 0 || str.length == 0)? (str): (pos == 0)? (str.slice(1)): (pos == str.length -1 )? (str.slice(0,pos)) :(str.slice(0,pos)+str.slice(pos+1)) }
