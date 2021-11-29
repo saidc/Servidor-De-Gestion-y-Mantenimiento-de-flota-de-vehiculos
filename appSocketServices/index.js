@@ -143,17 +143,14 @@ var onConnection = (socket) => {
     // solicitud de autenticacion 
     socket.on('auth', (msg) => {
       if(sesion.car == null){
-        console.log("sesion.car null")
         try{
           const obj = JSON.parse(msg)
-          console.log("parse(msg):",obj, ",is object:", typeof obj === 'object')
-          
           if(typeof obj === 'object'){
             if(obj.hasOwnProperty('PLACA_DE_VEHICULO')){
               // se verifica si la placa corresponde a un vehiculo existente
               sql.vehiculo.getID_Vehiculo(obj["PLACA_DE_VEHICULO"],(error, results, fields)=>{
                 if(error){
-                    throw error;
+                  console.log(error)
                 }
                 if(results.constructor.name == "Array"){
                     var ok = null
@@ -185,7 +182,6 @@ var onConnection = (socket) => {
                     }
                 }
               });
-               
             }
           }
         }catch(err){
