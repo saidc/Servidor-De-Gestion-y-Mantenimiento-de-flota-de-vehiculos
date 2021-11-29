@@ -149,37 +149,41 @@ var onConnection = (socket) => {
             if(obj.hasOwnProperty('PLACA_DE_VEHICULO')){
               // se verifica si la placa corresponde a un vehiculo existente
               sql.vehiculo.getID_Vehiculo(obj["PLACA_DE_VEHICULO"],(error, results, fields)=>{
+                
                 if(error){
                   console.log(error)
-                }
-                if(results.constructor.name == "Array"){
-                    var ok = null
-                    // si hay una o mas respuestas entonces si es un vehiculo o
-                    // dispositivo el cual guardar datos o analizar
-                    if(results.length > 0){
-                      sesion.car = obj["PLACA_DE_VEHICULO"]
-                      sesion.token = randomIntFromInterval(1000000, 1999999)
-                      ok = {error: false,auth: true, token: randomIntFromInterval(1000000, 1999999)}
-                      //console.log("authenticado correctamente")
-                    }else{
-                      ok = {error: false,auth: false}
-                    }
-                    socket.emit("auth",JSON.stringify(ok)) 
-                    // se buscara el usuario asignado a dicho vehiculo y se enviara 
-                    if(ok.auth){
-                      sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA_DE_VEHICULO"],(error2, results2, fields2)=>{
-                        if(error){
-                            throw error;
-                        }
-                        console.log(results);
-                        if(results2.constructor.name == "Array"){
-                          if(results2.length > 0){
-                            var ok = {error: false, user: results2 }
-                            socket.emit("update",JSON.stringify(ok))  
+                }else{
+                  console.log("get id vehiculo ",results)
+                  if(results.constructor.name == "Array"){
+                      var ok = null
+                      // si hay una o mas respuestas entonces si es un vehiculo o
+                      // dispositivo el cual guardar datos o analizar
+                      if(results.length > 0){
+                        sesion.car = obj["PLACA_DE_VEHICULO"]
+                        sesion.token = randomIntFromInterval(1000000, 1999999)
+                        ok = {error: false,auth: true, token: randomIntFromInterval(1000000, 1999999)}
+                        //console.log("authenticado correctamente")
+                      }else{
+                        ok = {error: false,auth: false}
+                      }
+                      socket.emit("auth",JSON.stringify(ok)) 
+                      // se buscara el usuario asignado a dicho vehiculo y se enviara 
+                      if(ok.auth){
+                        sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA_DE_VEHICULO"],(error2, results2, fields2)=>{
+                          if(error){
+                              throw error;
                           }
-                        }
-                      });
-                    }
+                          console.log(results);
+                          if(results2.constructor.name == "Array"){
+                            if(results2.length > 0){
+                              var ok = {error: false, user: results2 }
+                              socket.emit("update",JSON.stringify(ok))  
+                            }
+                          }
+                        });
+                      }
+                  }
+
                 }
               });
             }
