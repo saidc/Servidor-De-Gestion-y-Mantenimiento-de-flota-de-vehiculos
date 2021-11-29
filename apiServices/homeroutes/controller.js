@@ -123,6 +123,7 @@ var getVEHICULO_BY_PLACA_DE_VEHICULO = async(req,res)=>{
         }
     });
 };
+
 var getUSUARIO_BY_CORREO = async(req,res)=>{
     login = {correo: req.session.correo,rol: req.session.rol}
     correo = req.body.correo

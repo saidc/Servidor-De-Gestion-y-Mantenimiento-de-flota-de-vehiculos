@@ -29,7 +29,7 @@ var savedata = (data)=>{
         DISTANCE_SINCE_DTC_CLEAR = null
         ESTADO_DE_VEHICULO = null
 
-        if(obj.hasOwnProperty("PLACA_DE_VEHICULO"))                     { PLACA_DE_VEHICULO = obj["PLACA_DE_VEHICULO"];                                         }
+        if(obj.hasOwnProperty("PLACA_DE_VEHICULO"))         { PLACA_DE_VEHICULO = obj["PLACA_DE_VEHICULO"];                 }
         if(obj.hasOwnProperty("FECHA"))                     { FECHA = obj["FECHA"];                                         }
         if(obj.hasOwnProperty("SPEED"))                     { SPEED = obj["SPEED"];                                         }
         if(obj.hasOwnProperty("RPM"))                       { RPM = obj["RPM"];                                             }
@@ -197,6 +197,22 @@ var onConnection = (socket) => {
     });
     socket.on('disconnect', () => {
       console.log('user '+ socket.id +' disconnected');
+    });
+    socket.on('test', (msg) => {
+      socket.emit("client", "OK"); // es necesario enviar de vuelta el mensaje recibido 
+      // se verifica que el dispositivo haya sido autenticado
+      console.log("test: ",msg)
+      //if(sesion.car != null){
+      //  // se almacena la informacion recibida 
+      //  savedata(msg)
+      //  // se procesa la data recibida
+      //  procesarData(msg,sesion)
+      //  var ok = {error: false }
+      //  socket.emit("update",JSON.stringify(ok))  
+      //}else{
+      //  //console.log("no authenticado ")
+      //  socket.disconnect() // si un cliente no esta authenticado este lo desconectara
+      //}
     });
 }
 
