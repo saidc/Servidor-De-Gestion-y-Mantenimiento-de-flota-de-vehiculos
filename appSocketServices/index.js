@@ -144,6 +144,7 @@ var onConnection = (socket) => {
     socket.on('auth', (msg) => {
       console.log("auth:",msg)
       if(sesion.car == null){
+        console.log("sesion.car null")
         try{
           const obj = JSON.parse(msg)
           if(typeof obj === 'object'){
@@ -187,11 +188,14 @@ var onConnection = (socket) => {
             }
           }
         }catch(err){
-          console.log("error of cast json")
+          console.log("error of cast json: ",err)
           var ok = {error: true}
           socket.emit("update",JSON.stringify(ok))  
         }
+      }else{
+        console.log("session car not null: ",sesion.car);
       }
+
     });
     socket.on('update', (msg) => {
       console.log('receive update request: ' +socket.id +': '+ msg);
