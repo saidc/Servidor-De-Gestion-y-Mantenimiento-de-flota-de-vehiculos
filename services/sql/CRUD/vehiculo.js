@@ -14,8 +14,8 @@ module.exports.getVehiculobyId = async(ID , callback)=>{
     await query("SELECT * FROM 123databasename321.`vehiculo` WHERE (`id`= ? );",[ID],callback);
 }
 
-module.exports.getVehiculo = async(ID , callback)=>{
-    await query("SELECT PLACA FROM 123databasename321.`vehiculo`;",[ID],callback);
+module.exports.getVehiculo = async( callback)=>{
+    await query("SELECT PLACA FROM 123databasename321.`vehiculo`;",[],callback);
 }
 module.exports.getVehiculobyPlaca = async(Placa , callback)=>{
     await query("SELECT * FROM 123databasename321.`vehiculo` WHERE (PLACA = UPPER(?));",[Placa],callback);

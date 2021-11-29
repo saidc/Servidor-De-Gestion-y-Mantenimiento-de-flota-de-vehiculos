@@ -7,25 +7,26 @@ var filteredIOTReports = [];;
 var fieldForSelection = [
     "GENERO", "PLACA_DE_VEHICULO", "id_tipodevehiculo", "id_rutinademantenimiento", 
     "ESTADO_DE_VEHICULO", "ESTADO_DE_RUTINA", "ESTADO_DE_PLAN", "MEDICION_DE_TIEMPO",
-    "MEDICION_DE_DISTANCIA", "COMBUSTIBLE", "TIPO_DE_RUTINA","CORREO_DE_USUARIO","ROL"];
+    "MEDICION_DE_DISTANCIA", "COMBUSTIBLE", "TIPO_DE_RUTINA","CORREO_DE_USUARIO","ROL","OPERACION_DE_MANTENIMIENTO"];
 
 var optionForSelect = {
     // Datos que hay que obtener de base de datos
-    PLACA_DE_VEHICULO: ["ELM327", "UTP350", "ELN321"],
     id_tipodevehiculo: [],
-    id_rutinademantenimiento: ["Toyoda-739515", "Nissan-1596548", "Nissan-4985321"],
-    CORREO_DE_USUARIO: ["awef1@CORREO","wefw2@CORREO","fwee3@CORREO","fwee4@CORREO","fwee5@CORREO","fwee6@CORREO"],
+    id_rutinademantenimiento: [],
+    PLACA_DE_VEHICULO: [],
+    CORREO_DE_USUARIO: [],
     
     // datos estatico o fijos
     GENERO: ["MASCULINO", "FEMENINO"],
-    ESTADO_DE_VEHICULO: [ "MOVIMIENTO", "DETENIDO", "ENCENDIDO", "APAGADO"],
+    ESTADO_DE_VEHICULO: ["","MOVIMIENTO", "DETENIDO", "ENCENDIDO", "APAGADO"],
     ESTADO_DE_RUTINA: ["ACTIVA", "INACTIVA"],
-    ESTADO_DE_PLAN: ["EXITOSO", "ESPERA", "CANCELADO"],
+    ESTADO_DE_PLAN: ["ESPERA", "CANCELADO", "EXITOSO"],
     MEDICION_DE_TIEMPO: ["HORA", "DIA", "MES"],
     MEDICION_DE_DISTANCIA: ["KILOMETROS", "MILLAS"],
     COMBUSTIBLE: ["DIESEL", "GASOLINA", "GAS", "ELECTRICO"],
     TIPO_DE_RUTINA: ["PREVENTIVO", "CORRECTIVO"],
-    ROL:["ADMINISTRADOR","CONDUCTOR","TRABAJADOR"]
+    ROL:["ADMINISTRADOR","CONDUCTOR","TRABAJADOR"],
+    OPERACION_DE_MANTENIMIENTO:["INSPECCIONAR","REEMPLAZAR - CAMBIAR - LUBRICAR","LUBRICAR","APRETAR"]
 }
 
 var fieldForText = ["DESCRIPCION", "OBSERVACION"];
@@ -81,27 +82,29 @@ var createTable = (list, id)=>{
                 else{
                     var td = document.createElement('td');
                     td.setAttribute("data-heading", datakeys[i]);
-                    if(datakeys[i].includes("id_") || datakeys[i] == "PLACA_DE_VEHICULO"){
-                        var str = JSON.stringify({key: datakeys[i], id: item[datakeys[i]]});
-                        td.setAttribute("onclick", "redirectView('" + str + "')");
-                        td.setAttribute("onmouseover", "this.style.color='red';this.style.cursor='pointer';");
-                        td.setAttribute("onmouseout" , "this.style.color='';");
+                    if(datakeys[i].includes("id_") || datakeys[i] == "PLACA_DE_VEHICULO" || datakeys[i] == "CORREO_DE_USUARIO"){
+                        if(!(item[datakeys[i]] == null || item[datakeys[i]] == "")){
+                            var str = JSON.stringify({key: datakeys[i], id: item[datakeys[i]]});
+                            td.setAttribute("onclick", "redirectVisualizar('" + str + "')");
+                            td.setAttribute("onmouseover", "this.style.color='red';this.style.cursor='pointer';");
+                            td.setAttribute("onmouseout" , "this.style.color='';");
+                        }
                     }
                     td.innerHTML= item[datakeys[i]];
                     tr.appendChild(td);
                 }
                 
             }
-            // view button
+            // visualizar button
             if(id != "IOTReport"){
                 var td = document.createElement('td');
                 td.setAttribute("data-heading", "operation");
                 td.classList.add("operation-col");
-                var viewbtn = createbutton(item[datakeys[0]] + "-" + item[datakeys[1]], "view");
-                viewbtn.setAttribute("class", "item-view-button button");
+                var visualizarbtn = createbutton(item[datakeys[0]] + "-" + item[datakeys[1]], "visualizar");
+                visualizarbtn.setAttribute("class", "item-visualizar-button button");
                 var str = JSON.stringify({item: item, id: id});
-                viewbtn.setAttribute("onclick", "detail('" + str + "')");
-                td.appendChild(viewbtn);
+                visualizarbtn.setAttribute("onclick", "detail('" + str + "')");
+                td.appendChild(visualizarbtn);
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
@@ -141,8 +144,8 @@ var createTableForCRUD = (id, option, item)=>{
             var td = document.createElement('td');
             td.setAttribute("field-name", field);
 
-            if(option == "view") td.innerHTML= data.item[datakeys[index]];
-            if(option == "update") {
+            if(option == "visualizar") td.innerHTML= data.item[datakeys[index]];
+            if(option == "actualizar") {
                 var input =  createinput(datakeys[index], data.item[datakeys[index]]);
                 if(fieldForSelection.indexOf(datakeys[index]) >= 0) {
                     var input =  createselect(datakeys[index], data.item[datakeys[index]], optionForSelect[datakeys[index]]);
@@ -182,12 +185,12 @@ var createTableForCRUD = (id, option, item)=>{
                 temp_td.appendChild(label);
             }
 
-            if(option == "view") {
+            if(option == "visualizar") {
                 console.log("data.item[datakeys[index]]", data.item[datakeys[index]]);
                 var input = createlabel("half-size-"+ nextHalfFlag, data.item[datakeys[index]]);
                 temp_td.appendChild(input);
             }
-            if(option == "update") {
+            if(option == "actualizar") {
                 var input =  createinput(datakeys[index], data.item[datakeys[index]]);
                 if(fieldForSelection.indexOf(datakeys[index]) >= 0) {
                     var input =  createselect(datakeys[index], data.item[datakeys[index]], optionForSelect[datakeys[index]]);
@@ -276,13 +279,31 @@ var createselect = (id, value, option)=>{
     var select = document.createElement('select');
     select.setAttribute("id", id);
     select.setAttribute("class", id + "-input" + " select");
-    
-    for (var i = 0; i < option.length; i++) {
-        var o = document.createElement("option");
-        var t = document.createTextNode(option[i]);
-        o.setAttribute("value", option[i]);
-        o.appendChild(t);
-        select.appendChild(o);
+    for (var i = 0; i < option.length; i++) {   
+        var valor  = null
+        var nombre = null
+        
+        try {
+            nombre = option[i]["name"]
+            valor =  option[i]["value"] 
+        } catch (error) {
+            valor  = null
+            nombre = null
+        }
+        
+        if( valor != null && nombre != null){
+            var o = document.createElement("option");
+            var t = document.createTextNode(option[i]["name"]);
+            o.setAttribute("value", option[i]["value"]);
+            o.appendChild(t);
+            select.appendChild(o);
+        }else{
+            var o = document.createElement("option");
+            var t = document.createTextNode(option[i]);
+            o.setAttribute("value", option[i]);
+            o.appendChild(t);
+            select.appendChild(o);
+        }
     }
     if(value != ""){
         select.value = value;

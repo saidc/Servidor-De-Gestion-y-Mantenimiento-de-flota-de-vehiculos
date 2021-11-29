@@ -27,6 +27,10 @@ module.exports  = {
                     req.session.user = email;
                     req.session.correo = CORREO;
                     req.session.rol = ROL;
+                    var dnow = new Date(Date.now());
+                    dnow.setMinutes(dnow.getMinutes()+60) // se añaden 30 min al tiempo actual
+                    req.session.expires = dnow;
+                    
                     return res.redirect('/home');
                 }else{
                     return res.redirect('/login');

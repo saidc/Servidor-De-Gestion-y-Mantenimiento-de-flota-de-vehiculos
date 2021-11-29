@@ -30,7 +30,7 @@ window.addEventListener('click', function(e){
     }
   });
 
-var updateLoader = (id)=>{
+var actualizarLoader = (id)=>{
     var t = document.getElementById(id);
     if(t.className == "loader on"){
     	t.className = "loader off";

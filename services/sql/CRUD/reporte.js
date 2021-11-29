@@ -27,7 +27,7 @@ module.exports.LeerReporte = async (ID , callback)=>{
     await query("SELECT * FROM 123databasename321.reporte WHERE (`id`= ? );",[ID],callback);
 }
 // UPDATE    REPORTE
-module.exports.ActualizarReporte = async (ID, PLACA_DE_VEHICULO, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ESTADO_DE_VEHICULO, callback)=>{
+module.exports.ActualizarReporte = async (ID, PLACA_DE_VEHICULO, FECHA, GRUPO, BATERIA, LATITUD, LONGITUD, SPEED, RPM, DISTANCE_W_MIL, DISTANCE_SINCE_DTC_CLEAR, ESTADO_DE_VEHICULO,USER, callback)=>{
     var variables = [];
     var query_STR = "UPDATE `123databasename321`.`reporte` SET ";
      
@@ -41,7 +41,10 @@ module.exports.ActualizarReporte = async (ID, PLACA_DE_VEHICULO, FECHA, GRUPO, B
     if( RPM != null){ variables.push(RPM); query_STR += "`RPM`=?,"; }
     if( DISTANCE_W_MIL != null){ variables.push(DISTANCE_W_MIL); query_STR += "`DISTANCE_W_MIL`=?,"; }
     if( DISTANCE_SINCE_DTC_CLEAR != null){ variables.push(DISTANCE_SINCE_DTC_CLEAR); query_STR += "`DISTANCE_SINCE_DTC_CLEAR`=?,"; }
-    if( ESTADO_DE_VEHICULO != null){ variables.push(ESTADO_DE_VEHICULO); query_STR += "`ESTADO_DE_VEHICULO`=?"; }
+    if( ESTADO_DE_VEHICULO != null){ variables.push(ESTADO_DE_VEHICULO); query_STR += "`ESTADO_DE_VEHICULO`=?,"; }
+    if( USER != null){ variables.push(USER); query_STR += "`USER`=?,"; }
+    
+    query_str = removechar(query_str, query_str.length -1)
 
     variables.push(ID);
     query_STR += " WHERE (`id` = ?);";
@@ -52,8 +55,18 @@ module.exports.EliminarReporte= async (ID,callback)=>{
     await query("DELETE FROM `123databasename321`.`reporte` WHERE (`id` = ?);",[ID],callback);
 }
 // Get REPORT BETWEEN DOS FECHAS HORA
-module.exports.getReporte_por_id_fecha_hora = async (PLACA_DE_VEHICULO, Fecha_inicial, Fecha_final, callback)=>{
-    await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ? and (FECHA between ? and ?) );",[PLACA_DE_VEHICULO,Fecha_inicial,Fecha_final],callback);
+module.exports.getReporte_by_estado_fecha_hora = async (PLACA_DE_VEHICULO ,ESTADO_DE_VEHICULO, Fecha_inicial, Fecha_final, callback)=>{
+    if(ESTADO_DE_VEHICULO == ""){
+        
+        await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ?) and (FECHA between ? and ?) ;",[PLACA_DE_VEHICULO,Fecha_inicial,Fecha_final],callback);
+    }else{
+        await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ?) and ((ESTADO_DE_VEHICULO = ? ) and (FECHA between ? and ?) );",[PLACA_DE_VEHICULO,ESTADO_DE_VEHICULO,Fecha_inicial,Fecha_final],callback);
+
+    }
+}
+// Get REPORT BETWEEN DOS FECHAS HORA
+module.exports.getReporte_by_placa = async (PLACA_DE_VEHICULO, callback)=>{
+    await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ?) LIMIT 100;",[PLACA_DE_VEHICULO],callback);
 }
 //  GetColums names
 module.exports.GetColumnsNames = async (callback)=>{

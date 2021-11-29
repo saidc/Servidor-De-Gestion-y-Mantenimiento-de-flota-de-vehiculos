@@ -15,11 +15,11 @@ module.exports.getrutinademantenimientoPosNoRows = async ( PosicionFila ,NoFilas
 }
 
 // CREATE rutinademantenimiento
-module.exports.Crearrutinademantenimiento = async( TIEMPO, MEDICION_DE_TIEMPO, DISTANCIA, MEDICION_DE_DISTANCIA, DESCRIPCION, ESTADO_DE_RUTINA, TIPO_DE_RUTINA, PLACA_DE_VEHICULO, id_tipodevehiculo, TITULO, OPERACION, callback)=>{
-    await query("INSERT INTO `123databasename321`.`rutinademantenimiento` ( `TIEMPO`, `MEDICION_DE_TIEMPO`, `DISTANCIA`, `MEDICION_DE_DISTANCIA`, `DESCRIPCION`, `ESTADO_DE_RUTINA`, `TIPO_DE_RUTINA`, `PLACA_DE_VEHICULO`, `id_tipodevehiculo`, `TITULO`, `OPERACION`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? );",[ TIEMPO, MEDICION_DE_TIEMPO, DISTANCIA, MEDICION_DE_DISTANCIA, DESCRIPCION, ESTADO_DE_RUTINA, TIPO_DE_RUTINA, PLACA_DE_VEHICULO, id_tipodevehiculo, TITULO, OPERACION ], callback);
+module.exports.Crearrutinademantenimiento = async( TIEMPO, MEDICION_DE_TIEMPO, DISTANCIA, MEDICION_DE_DISTANCIA, DESCRIPCION, ESTADO_DE_RUTINA, TIPO_DE_RUTINA, PLACA_DE_VEHICULO, id_tipodevehiculo, TITULO, OPERACION_DE_MANTENIMIENTO, callback)=>{
+    await query("INSERT INTO `123databasename321`.`rutinademantenimiento` ( `TIEMPO`, `MEDICION_DE_TIEMPO`, `DISTANCIA`, `MEDICION_DE_DISTANCIA`, `DESCRIPCION`, `ESTADO_DE_RUTINA`, `TIPO_DE_RUTINA`, `PLACA_DE_VEHICULO`, `id_tipodevehiculo`, `TITULO`, `OPERACION_DE_MANTENIMIENTO`) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? );",[ TIEMPO, MEDICION_DE_TIEMPO, DISTANCIA, MEDICION_DE_DISTANCIA, DESCRIPCION, ESTADO_DE_RUTINA, TIPO_DE_RUTINA, PLACA_DE_VEHICULO, id_tipodevehiculo, TITULO, OPERACION_DE_MANTENIMIENTO ], callback);
 }
 // UPDATE rutinademantenimiento
-module.exports.Actualizarrutinademantenimiento = async(ID, TIEMPO, MEDICION_DE_TIEMPO, DISTANCIA, MEDICION_DE_DISTANCIA, DESCRIPCION, ESTADO_DE_RUTINA, TIPO_DE_RUTINA, PLACA_DE_VEHICULO, id_tipodevehiculo, TITULO, OPERACION, callback)=>{
+module.exports.Actualizarrutinademantenimiento = async(ID, TIEMPO, MEDICION_DE_TIEMPO, DISTANCIA, MEDICION_DE_DISTANCIA, DESCRIPCION, ESTADO_DE_RUTINA, TIPO_DE_RUTINA, PLACA_DE_VEHICULO, id_tipodevehiculo, TITULO, OPERACION_DE_MANTENIMIENTO, callback)=>{
     var variables = [];
     var query_str = "UPDATE `123databasename321`.`rutinademantenimiento` SET ";
     
@@ -33,7 +33,7 @@ module.exports.Actualizarrutinademantenimiento = async(ID, TIEMPO, MEDICION_DE_T
     if( PLACA_DE_VEHICULO != null && PLACA_DE_VEHICULO != "" ){ variables.push( PLACA_DE_VEHICULO ); query_str += " `PLACA_DE_VEHICULO` =?,";}
     if( id_tipodevehiculo != null && id_tipodevehiculo != "" ){ variables.push( id_tipodevehiculo ); query_str += " `id_tipodevehiculo` =?,";}
     if( TITULO != null && TITULO != "" ){ variables.push( TITULO ); query_str += " `TITULO` =?,";}
-    if( OPERACION != null && OPERACION != "" ){ variables.push( OPERACION ); query_str += " `OPERACION` =?,";}
+    if( OPERACION_DE_MANTENIMIENTO != null && OPERACION_DE_MANTENIMIENTO != "" ){ variables.push( OPERACION_DE_MANTENIMIENTO ); query_str += " `OPERACION_DE_MANTENIMIENTO` =?,";}
     
     query_str = removechar(query_str, query_str.length -1)
 
@@ -45,6 +45,7 @@ module.exports.Actualizarrutinademantenimiento = async(ID, TIEMPO, MEDICION_DE_T
 module.exports.getNumberOfrutinademantenimiento = async ( callback)=>{
     await query("SELECT COUNT(*) as NumRow FROM 123databasename321.`rutinademantenimiento` ;",[],callback);
 }
+
 // READ rutinademantenimiento
 module.exports.getrutinademantenimientobyId = async(ID , callback)=>{
     await query("SELECT * FROM 123databasename321.`rutinademantenimiento` WHERE (`id`= ? );",[ID],callback);
@@ -59,5 +60,6 @@ module.exports.Eliminarrutinademantenimiento = async(ID,callback)=>{
 module.exports.GetColumnsNames = async (callback)=>{
     await query("SHOW COLUMNS FROM 123databasename321.`rutinademantenimiento` ;",[],callback);
 }
+
 var removechar=(str,pos)=>{ return ( pos >= str.length || pos < 0 || str.length == 0)? (str): (pos == 0)? (str.slice(1)): (pos == str.length -1 )? (str.slice(0,pos)) :(str.slice(0,pos)+str.slice(pos+1)) }
 

@@ -11,9 +11,11 @@ router.get( "/homesidebar", isAuth, controller.getSidebarItems );
 // get
 router.get( "/dataTypes", isAuth, controller.getDataTypes);
 
-router.post( "/updateoptionsforselect", isAuth, controller.updateoptionsforselect);
+router.post( "/actualizaroptionsforselect", isAuth, controller.actualizaroptionsforselect);
 router.post( "/gettipodevehiculosbyId", isAuth, controller.gettipodevehiculosbyId);
+router.post( "/getRutinademantenimientobyid", isAuth, controller.getRutinademantenimientobyid);
 router.post( "/getVEHICULO_BY_PLACA_DE_VEHICULO", isAuth, controller.getVEHICULO_BY_PLACA_DE_VEHICULO);
+router.post( "/getUSUARIO_BY_CORREO", isAuth, controller.getUSUARIO_BY_CORREO);
 
 // get functions
 router.post( "/Usuarios"    , isAuth, controller.getUsuarios );
@@ -23,24 +25,26 @@ router.post( "/RutinasDeMantenimiento"   , isAuth, controller.getRutinasDeManten
 router.post( "/PlaneacionesDeMantenimiento"   , isAuth, controller.getPlaneacionesDeMantenimiento );
 router.post( "/Alertas"     , isAuth, controller.getAlertas);
 router.post( "/VEHICULO_USUARIO"     , isAuth, controller.getVEHICULO_USUARIO);
+router.post( "/reporte"     , isAuth, controller.getreporte);
+router.post( "/reportefiltro"     , isAuth, controller.getreportefiltro);
 
-// update
+// actualizar
 router.post( "/writeUsuarios"    , isAuth, controller.writeUsuarios );
 router.post( "/writeVehiculos"   , isAuth, controller.writeVehiculos );
 router.post( "/writeTiposdevehiculos"   , isAuth, controller.writeTiposdevehiculos );
 router.post( "/writeRutinasDeMantenimiento"   , isAuth, controller.writeRutinasDeMantenimiento );
 router.post( "/writePlaneacionesDeMantenimiento"   , isAuth, controller.writePlaneacionesDeMantenimiento );
-router.post( "/writeAlertas"     , isAuth, controller.writeAlertas);
+//router.post( "/writeAlertas"     , isAuth, controller.writeAlertas);
 router.post( "/writeVEHICULO_USUARIO"     , isAuth, controller.writeVEHICULO_USUARIO);
 
-// delete
-router.post( "/deleteUsuarios"    , isAuth, controller.deleteUsuarios );
-router.post( "/deleteVehiculos"   , isAuth, controller.deleteVehiculos );
-router.post( "/deleteTiposdevehiculos"   , isAuth, controller.deleteTiposdevehiculos );
-router.post( "/deleteRutinasDeMantenimiento"   , isAuth, controller.deleteRutinasDeMantenimiento );
-router.post( "/deletePlaneacionesDeMantenimiento"   , isAuth, controller.deletePlaneacionesDeMantenimiento );
-router.post( "/deleteAlertas"     , isAuth, controller.deleteAlertas);
-router.post( "/deleteVEHICULO_USUARIO"     , isAuth, controller.deleteVEHICULO_USUARIO);
+// eliminar
+router.post( "/eliminarUsuarios"    , isAuth, controller.eliminarUsuarios );
+router.post( "/eliminarVehiculos"   , isAuth, controller.eliminarVehiculos );
+router.post( "/eliminarTiposdevehiculos"   , isAuth, controller.eliminarTiposdevehiculos );
+router.post( "/eliminarRutinasDeMantenimiento"   , isAuth, controller.eliminarRutinasDeMantenimiento );
+router.post( "/eliminarPlaneacionesDeMantenimiento"   , isAuth, controller.eliminarPlaneacionesDeMantenimiento );
+router.post( "/eliminarAlertas"     , isAuth, controller.eliminarAlertas);
+router.post( "/eliminarVEHICULO_USUARIO"     , isAuth, controller.eliminarVEHICULO_USUARIO);
 
 
 /*

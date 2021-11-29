@@ -9,6 +9,7 @@ const reporte = require("./CRUD/reporte.js")
 const usuario_vehiculo = require("./CRUD/usuariovehiculo.js")
 const alert = require("./CRUD/alerta.js")
 const rutinademantenimiento = require("./CRUD/rutinademantenimiento.js")
+const plandemantenimiento = require("./CRUD/plandemantenimiento.js")
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))  
 
@@ -44,6 +45,7 @@ usuario_vehiculo.addQuery(query);
 alert.addQuery(query);
 tipodevehiculo.addQuery(query);
 rutinademantenimiento.addQuery(query);
+plandemantenimiento.addQuery(query);
 
 module.exports.usuario = usuario; 
 module.exports.vehiculo = vehiculo; 
@@ -52,3 +54,4 @@ module.exports.usuario_vehiculo = usuario_vehiculo;
 module.exports.alert = alert;
 module.exports.tipodevehiculo = tipodevehiculo;
 module.exports.rutinademantenimiento = rutinademantenimiento;
+module.exports.plandemantenimiento = plandemantenimiento;
