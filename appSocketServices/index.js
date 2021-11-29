@@ -142,6 +142,7 @@ var onConnection = (socket) => {
     });
     // solicitud de autenticacion 
     socket.on('auth', (msg) => {
+      console.log("auth:",msg)
       if(sesion.car == null){
         try{
           const obj = JSON.parse(msg)
@@ -199,9 +200,9 @@ var onConnection = (socket) => {
       console.log('user '+ socket.id +' disconnected');
     });
     socket.on('test', (msg) => {
+      console.log("test: ",msg)
       socket.emit("client", "OK"); // es necesario enviar de vuelta el mensaje recibido 
       // se verifica que el dispositivo haya sido autenticado
-      console.log("test: ",msg)
       //if(sesion.car != null){
       //  // se almacena la informacion recibida 
       //  savedata(msg)
