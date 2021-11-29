@@ -146,6 +146,8 @@ var onConnection = (socket) => {
         try{
           const obj = JSON.parse(msg)
           if(typeof obj === 'object'){
+
+            console.log("has placa_de_vehiculo: ",obj)
             if(obj.hasOwnProperty('PLACA_DE_VEHICULO')){
               // se verifica si la placa corresponde a un vehiculo existente
               sql.vehiculo.getID_Vehiculo(obj["PLACA_DE_VEHICULO"],(error, results, fields)=>{
