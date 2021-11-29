@@ -66,8 +66,8 @@ module.exports.getReporte_by_estado_fecha_hora = async (PLACA_DE_VEHICULO ,ESTAD
 }
 // Get REPORT BETWEEN DOS FECHAS HORA
 module.exports.getReporte_by_placa = async (PLACA_DE_VEHICULO, callback)=>{
-    await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ?) LIMIT 100;",[PLACA_DE_VEHICULO],callback);
-}
+    await query("SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = ?) ORDER BY FECHA DESC LIMIT 100;",[PLACA_DE_VEHICULO],callback);
+}// SELECT * FROM 123databasename321.reporte WHERE (PLACA_DE_VEHICULO = 'FWW722') ORDER BY FECHA DESC LIMIT 100; FWW722
 //  GetColums names
 module.exports.GetColumnsNames = async (callback)=>{
     await query("SHOW COLUMNS FROM 123databasename321.reporte ;",[],callback);
