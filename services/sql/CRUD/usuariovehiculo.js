@@ -38,7 +38,7 @@ module.exports.Actualizarusuario_vehiculo = async(ID, PLACA_DE_VEHICULO, CORREO_
 }
 // get usuario by user_id take it from placa
 module.exports.GetUsuario_byPlaca = async(PLACA_DE_VEHICULO , callback)=>{
-    await query("SELECT * FROM heroku_60b5845a2aabf7e.usuario where id in (select id_usuario From heroku_60b5845a2aabf7e.usuario_vehiculo where PLACA_DE_VEHICULO = ? );",[PLACA_DE_VEHICULO ], callback);
+    await query("SELECT * FROM heroku_60b5845a2aabf7e.usuario where CORREO in (select CORREO_DE_USUARIO From heroku_60b5845a2aabf7e.usuario_vehiculo where PLACA_DE_VEHICULO = ? );",[PLACA_DE_VEHICULO ], callback);
 }
 
 //  GetColums names

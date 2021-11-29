@@ -172,14 +172,15 @@ var onConnection = (socket) => {
                       // se buscara el usuario asignado a dicho vehiculo y se enviara 
                       if(ok.auth){
                         sql.usuario_vehiculo.GetUsuario_byPlaca(obj["PLACA_DE_VEHICULO"],(error2, results2, fields2)=>{
-                          if(error){
-                              throw error;
-                          }
-                          console.log(results);
-                          if(results2.constructor.name == "Array"){
-                            if(results2.length > 0){
-                              var ok = {error: false, user: results2 }
-                              socket.emit("update",JSON.stringify(ok))  
+                          if(error2){
+                            console.log(error2);
+                          }else{
+                            console.log(results2);
+                            if(results2.constructor.name == "Array"){
+                              if(results2.length > 0){
+                                var ok = {error: false, user: results2 }
+                                socket.emit("update",JSON.stringify(ok))  
+                              }
                             }
                           }
                         });
