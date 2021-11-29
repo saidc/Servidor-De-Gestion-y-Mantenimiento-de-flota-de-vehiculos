@@ -142,11 +142,12 @@ var onConnection = (socket) => {
     });
     // solicitud de autenticacion 
     socket.on('auth', (msg) => {
-      console.log("auth:",msg)
       if(sesion.car == null){
         console.log("sesion.car null")
         try{
           const obj = JSON.parse(msg)
+          console.log("parse(msg):",obj, ",is object:", typeof obj === 'object')
+          
           if(typeof obj === 'object'){
             if(obj.hasOwnProperty('PLACA_DE_VEHICULO')){
               // se verifica si la placa corresponde a un vehiculo existente
@@ -193,9 +194,8 @@ var onConnection = (socket) => {
           socket.emit("update",JSON.stringify(ok))  
         }
       }else{
-        console.log("session car not null: ",sesion.car);
+        //console.log("session car not null: ",sesion.car);
       }
-
     });
     socket.on('update', (msg) => {
       console.log('receive update request: ' +socket.id +': '+ msg);
